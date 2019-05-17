@@ -2,12 +2,9 @@ package com.example.android.service;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.android.bean.HomeArticle;
-import com.example.android.presenter.InternetPresenter;
+import com.example.android.bean.Article;
 import com.example.android.presenter.InternetPresenter;
 import com.example.android.util.ConnectUtil;
 
@@ -15,18 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -38,7 +25,7 @@ import java.util.ListIterator;
 public class MyIntentService extends IntentService {
 
     private InternetPresenter internetPresenter;
-    private List<HomeArticle> mHomeArticleList=new LinkedList<>();
+    private List<Article> mHomeArticleList=new LinkedList<>();
 
     public MyIntentService() {
 
@@ -64,7 +51,7 @@ public class MyIntentService extends IntentService {
             JSONArray jsonArray=new JSONArray(ajsonObject.getString("datas"));
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject jsonObject=jsonArray.getJSONObject(i);
-                HomeArticle homeArticle=new HomeArticle();
+                Article homeArticle=new Article();
                 homeArticle.setMtitle(jsonObject.getString("title"));
                 homeArticle.setMauthor(top+jsonObject.getString("author"));
                 homeArticle.setMreleaseTime(jsonObject.getString("niceDate"));

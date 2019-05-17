@@ -8,33 +8,46 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.android.R;
-import com.example.android.bean.HomeArticle;
-import com.example.android.view.HomeFragment;
+import com.example.android.bean.Article;
 
 import java.util.List;
 
-public class AticleViewAdapter extends ArrayAdapter<HomeArticle> {
+public class AticleViewAdapter extends ArrayAdapter<Article> {
 
     private int resourceId;
 
-    public AticleViewAdapter(Context context, int textViewResourceId, List<HomeArticle> objects){
+    public AticleViewAdapter(Context context, int textViewResourceId, List<Article> objects){
         super(context,textViewResourceId,objects);
         resourceId=textViewResourceId;
     }
 
     @Override
     public View getView(int position, View convertView,ViewGroup parent) {
-        HomeArticle homeArticle=getItem(position);
-        View view= LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
-        TextView title=null,author=null,time=null,label=null;
-        title=(TextView)view.findViewById(R.id.title);
-        author=(TextView)view.findViewById(R.id.author);
-        time=(TextView)view.findViewById(R.id.time);
-        label=(TextView)view.findViewById(R.id.type);
-        title.setText(homeArticle.getMtitle());
-        author.setText(homeArticle.getMauthor());
-        time.setText(homeArticle.getMreleaseTime());
-        label.setText(homeArticle.getType());
+        Article homeArticle=getItem(position);
+        View view;
+        ViewHolder viewHolder;
+        if(convertView==null) {
+            view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
+            viewHolder=new ViewHolder();
+            viewHolder.title = (TextView) view.findViewById(R.id.title);
+            viewHolder.author = (TextView) view.findViewById(R.id.author);
+            viewHolder.time = (TextView) view.findViewById(R.id.time);
+            viewHolder.label = (TextView) view.findViewById(R.id.type);
+            view.setTag(viewHolder);//将viewholder存储在view中
+
+        }else{
+            view=convertView;
+            viewHolder=(ViewHolder)view.getTag();//重新获取viewholder
+        }
+        viewHolder.title.setText(homeArticle.getMtitle());
+        viewHolder.author.setText(homeArticle.getMauthor());
+        viewHolder.time.setText(homeArticle.getMreleaseTime());
+        viewHolder.label.setText(homeArticle.getType());
         return view;
     }
+
+    class ViewHolder{
+        TextView title,author,time,label;
+    }
+
 }

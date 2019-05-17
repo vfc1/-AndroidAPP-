@@ -1,11 +1,9 @@
 package com.example.android.service;
 
-import android.app.Notification;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
-import com.example.android.bean.HomeArticle;
+import com.example.android.bean.Article;
 import com.example.android.presenter.InternetPresenter;
 import com.example.android.util.ConnectUtil;
 
@@ -14,13 +12,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ArticleLoad {
 
     private InternetPresenter mPresenter;
-    private List<HomeArticle> mHomeArticleList=new ArrayList<>();
+    private List<Article> mHomeArticleList=new ArrayList<>();
     private Message message=new Message();
     private Handler handler=new Handler() {
         public void handleMessage(Message msg) {
@@ -65,7 +62,7 @@ public class ArticleLoad {
             JSONArray jsonArray = new JSONArray(ajsonObject.getString("datas"));
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                HomeArticle homeArticle = new HomeArticle();
+                Article homeArticle = new Article();
                 homeArticle.setMtitle(jsonObject.getString("title"));
                 homeArticle.setMauthor(jsonObject.getString("author"));
                 homeArticle.setMreleaseTime(jsonObject.getString("niceDate"));
@@ -88,7 +85,7 @@ public class ArticleLoad {
             JSONArray jsonArray = new JSONArray(ajsonObject.getString("data"));
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                HomeArticle homeArticle = new HomeArticle();
+                Article homeArticle = new Article();
                 homeArticle.setMtitle(jsonObject.getString("title"));
                 homeArticle.setMauthor(jsonObject.getString("author"));
                 homeArticle.setMreleaseTime(jsonObject.getString("niceDate"));

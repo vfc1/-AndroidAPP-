@@ -2,16 +2,13 @@ package com.example.android.presenter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
-import com.example.android.bean.HomeArticle;
+import com.example.android.bean.Article;
 import com.example.android.service.ArticleLoad;
-import com.example.android.service.MyIntentService;
 import com.example.android.view.HomeFragment;
-import com.example.android.view.MainActivity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -42,7 +39,7 @@ public class InternetPresenter implements Serializable {
         Toast.makeText(mActivity,error,Toast.LENGTH_LONG).show();
     }
 
-    public void result(List<HomeArticle> homeArticleList){
+    public void result(List<Article> homeArticleList){
         mHomeFragment.refresh(homeArticleList);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.android.bean;
 
-public class HomeArticle {
+public class Article {
 
     private String mtitle;
     private String mauthor;
