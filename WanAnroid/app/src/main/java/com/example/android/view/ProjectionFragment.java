@@ -14,6 +14,7 @@ public class ProjectionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view=inflater.inflate(R.layout.projection_fragment,container,false);
+        Log.d("Knowledge","项目的碎片");
         return view;
     }
 }
