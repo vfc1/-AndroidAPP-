@@ -36,20 +36,29 @@ public class ArticleLoad {
         }
     };
 
-    public ArticleLoad(InternetPresenter presenter){
+    public ArticleLoad(InternetPresenter presenter, final String website, final int i){
         this.mPresenter=presenter;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 message.what=1;
-                String jsonDataTop = ConnectUtil.connect("https://www.wanandroid.com/article/top/json", mPresenter);
-                String jsonData= ConnectUtil.connect("https://www.wanandroid.com/article/list/0/json",mPresenter);
-                parseTopJSON(jsonDataTop);
-                parseJSON(jsonData);
-                if(jsonDataTop==null||jsonData==null){
+                String topJSONdata=null;
+                String jsonData = ConnectUtil.connect(website, mPresenter);
+                if(i==0){
+                    topJSONdata=ConnectUtil.connect("https://www.wanandroid.com/article/top/json",mPresenter);
+                }
+                if(jsonData==null){
                     message.what=3;
                     handler.sendMessage(message);
+                }else{
+                    if(i==0){
+                        parseTopJSON(topJSONdata);
+                        parseJSON(jsonData);
+                    }else{
+                        parseJSON(jsonData);
+                    }
                 }
+
                 handler.sendMessage(message);
             }
         }).start();

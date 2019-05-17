@@ -23,12 +23,12 @@ public class InternetPresenter implements Serializable {
         this.mHomeFragment=homeFragment;
     }
 
-    public void load(){
+    public void load(String website,int i){
         //判断是否有网络连接
         ConnectivityManager connectivityManager= (ConnectivityManager)mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mNetworkInfo = connectivityManager.getActiveNetworkInfo();
         if (mNetworkInfo != null) {
-            new ArticleLoad(this);
+            new ArticleLoad(this,website,i);
         } else{
             connectionfailed("网络连接失败");
         }

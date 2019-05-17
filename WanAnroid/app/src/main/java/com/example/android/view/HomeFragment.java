@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,14 @@ import java.util.List;
 
 public class  HomeFragment extends Fragment {
 
-    AticleViewAdapter madapter;
-    InternetPresenter mpresenter;
-    Activity mActivity;
+    private AticleViewAdapter madapter;
+    private InternetPresenter mpresenter;
+    private Activity mActivity;
+    private SwipeRefreshLayout swipeRefresh;
+    private final String web1="https://www.wanandroid.com/article/list/";
+    private final String web2="/json";
+    private int i=0;
+
     List<Article> mHomeArticleList=new ArrayList<>();
 
     @Override
@@ -32,10 +38,22 @@ public class  HomeFragment extends Fragment {
         View view=inflater.inflate(R.layout.home_fragment,container,false);
         mActivity=(Activity)getContext();
         mpresenter=new InternetPresenter(mActivity,this);
-        load();
+        swipeRefresh=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh);
+        swipeRefresh.setColorSchemeResources(R.color.colorBulue);
+
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadAticle(web1+0+web2,0);
+                swipeRefresh.setRefreshing(false);
+            }
+        });
+
+        loadAticle(web1+i+web2,i);
         madapter= new AticleViewAdapter(mActivity, R.layout.article_item, mHomeArticleList);
         ListView listView=(ListView)view.findViewById(R.id.list_view);
         listView.setAdapter(madapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -56,8 +74,8 @@ public class  HomeFragment extends Fragment {
         madapter.notifyDataSetChanged();
     }
 
-    public void load(){
-        mpresenter.load();
+    public void loadAticle(String website,int i){
+        mpresenter.load(website,i);
     }
 
 }
