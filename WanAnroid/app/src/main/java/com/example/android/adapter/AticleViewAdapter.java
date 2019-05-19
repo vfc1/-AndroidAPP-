@@ -8,22 +8,22 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.android.R;
-import com.example.android.bean.Article;
+import com.example.android.bean.ArticleBean;
 
 import java.util.List;
 
-public class AticleViewAdapter extends ArrayAdapter<Article> {
+public class AticleViewAdapter extends ArrayAdapter<ArticleBean> {
 
     private int resourceId;
 
-    public AticleViewAdapter(Context context, int textViewResourceId, List<Article> objects){
+    public AticleViewAdapter(Context context, int textViewResourceId, List<ArticleBean> objects){
         super(context,textViewResourceId,objects);
         resourceId=textViewResourceId;
     }
 
     @Override
     public View getView(int position, View convertView,ViewGroup parent) {
-        Article homeArticle=getItem(position);
+        ArticleBean homeArticle=getItem(position);
         View view;
         ViewHolder viewHolder;
         if(convertView==null) {

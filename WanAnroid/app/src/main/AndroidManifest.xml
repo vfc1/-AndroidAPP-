@@ -16,10 +16,6 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".view.WebActivity"></activity>
 
-        <service
-            android:name=".service.MyIntentService"
-            android:exported="false" />
-
         <activity android:name=".view.SearchActivity" />
         <activity android:name=".view.MainActivity">
             <intent-filter>
