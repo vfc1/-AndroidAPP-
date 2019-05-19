@@ -74,14 +74,18 @@ public class  HomeFragment extends Fragment {
         ListView listView=(ListView)view.findViewById(R.id.list_view);
         listView.setAdapter(madapter);
         ////////////////////////////
-        bannerAdapter=new BannerAdapter(mViewList);
         viewPager=(ViewPager)getLayoutInflater().inflate(
         R.layout.view_pager_item,  null );
+        bannerAdapter=new BannerAdapter(mViewList,viewPager);
         //设置ViewPager的宽和高
         viewPager.setLayoutParams(new  ListView.LayoutParams(
         ListView.LayoutParams.MATCH_PARENT,620));
         viewPager.setAdapter(bannerAdapter);
         listView.addHeaderView(viewPager);
+        //要求父容易不要响应touch事件
+        viewPager.requestDisallowInterceptTouchEvent(true);
+        //开始计时，自动切换图片
+        new ViewpagerTime(viewPager);
         /////////////////////
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

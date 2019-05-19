@@ -49,7 +49,7 @@ public class BannerLoad {
                 String jsonData=ConnectUtil.read(connection);
                 parseJSON(jsonData);
                 try {
-                    Thread.sleep(8000);
+                    Thread.sleep(6000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     Log.i("bannerload","进程进入睡眠失败");
