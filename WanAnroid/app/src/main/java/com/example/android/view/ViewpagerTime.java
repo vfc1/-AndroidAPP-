@@ -13,7 +13,8 @@ import static java.lang.Thread.sleep;
 
 public class ViewpagerTime {
 
-    ViewPager mViewPager;
+    private ViewPager mViewPager;
+    private Boolean mBool=true;
 
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
@@ -37,7 +38,7 @@ public class ViewpagerTime {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true){
+                while (mBool){
                     Message message=new Message();
                     message.what=1;
                     handler.sendMessage(message);
@@ -51,5 +52,9 @@ public class ViewpagerTime {
 
             }
         }).start();
+    }
+
+    public void stop(){
+        mBool=false;
     }
 }
