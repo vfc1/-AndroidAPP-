@@ -1,5 +1,6 @@
 package com.example.android.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -54,9 +55,6 @@ public class  HomeFragment extends Fragment {
         mActivity=(Activity)getContext();
         mpresenter=new InternetPresenter(mActivity,this);
 /////////////////////////////////////////////////
-        viewPager=(ViewPager)view.findViewById(R.id.view_pager);
-        bannerAdapter=new BannerAdapter(mViewList);
-        viewPager.setAdapter(bannerAdapter);
         mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
  /////////////////////////////////////////////////////
         swipeRefresh=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh);
@@ -66,6 +64,7 @@ public class  HomeFragment extends Fragment {
             @Override
             public void onRefresh() {
                 loadAticle(web1+0+web2,0);
+                mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
                 swipeRefresh.setRefreshing(false);
             }
         });
@@ -74,6 +73,16 @@ public class  HomeFragment extends Fragment {
         madapter= new AticleViewAdapter(mActivity, R.layout.article_item, mHomeArticleList);
         ListView listView=(ListView)view.findViewById(R.id.list_view);
         listView.setAdapter(madapter);
+        ////////////////////////////
+        bannerAdapter=new BannerAdapter(mViewList);
+        viewPager=(ViewPager)getLayoutInflater().inflate(
+        R.layout.view_pager_item,  null );
+        //设置ViewPager的宽和高
+        viewPager.setLayoutParams(new  ListView.LayoutParams(
+        ListView.LayoutParams.MATCH_PARENT,620));
+        viewPager.setAdapter(bannerAdapter);
+        listView.addHeaderView(viewPager);
+        /////////////////////
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -92,7 +101,6 @@ public class  HomeFragment extends Fragment {
         }
         for(int i=0;i<homeArticleList.size();i++){
             mHomeArticleList.add(homeArticleList.get(i));
-
         }
         madapter.notifyDataSetChanged();
     }
@@ -104,6 +112,7 @@ public class  HomeFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void bannerRefresh(List<BannerBean> bannerBeanList){
 
+        if(mViewList!=null){mViewList.clear();}
         for(int i=0;i<bannerBeanList.size();i++) {
             mBannerBean=bannerBeanList.get(i);
             ImageButton imageButton = new ImageButton(mActivity);
