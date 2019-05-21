@@ -1,32 +1,24 @@
 package com.example.android.service;
 
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import com.example.android.bean.ArticleBean;
-import com.example.android.presenter.InternetPresenter;
+import com.example.android.presenter.homeFlagmentPresenter;
 import com.example.android.util.ConnectUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleLoad {
 
-    private InternetPresenter mPresenter;
+    private homeFlagmentPresenter mPresenter;
     private List<ArticleBean> mHomeArticleList = new ArrayList<>();
     private Message message = new Message();
     private Handler handler = new Handler() {
@@ -46,7 +38,7 @@ public class ArticleLoad {
         }
     };
 
-    public ArticleLoad(InternetPresenter presenter, final String website, final int i) {
+    public ArticleLoad(homeFlagmentPresenter presenter, final String website, final int i) {
         this.mPresenter = presenter;
         new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)

@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.example.android.bean.ArticleBean;
@@ -17,12 +18,12 @@ import com.example.android.view.HomeFragment;
 import java.io.Serializable;
 import java.util.List;
 
-public class InternetPresenter implements Serializable {
+public class homeFlagmentPresenter implements Serializable {
 
-    private Activity mActivity;
+    private Context mActivity;
     private HomeFragment mHomeFragment;
 
-    public InternetPresenter(Activity activity,HomeFragment homeFragment){
+    public homeFlagmentPresenter(Context activity, HomeFragment homeFragment){
         this.mActivity=activity;
         this.mHomeFragment=homeFragment;
     }

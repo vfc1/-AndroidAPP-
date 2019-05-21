@@ -14,8 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.WebActivity"></activity>
-
+        <activity android:name=".view.KnowLedgeDetailActivity"></activity>
+        <activity android:name=".view.WebActivity" />
         <activity android:name=".view.SearchActivity" />
         <activity android:name=".view.MainActivity">
             <intent-filter>

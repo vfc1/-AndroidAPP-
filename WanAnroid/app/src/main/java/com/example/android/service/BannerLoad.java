@@ -7,7 +7,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.example.android.bean.BannerBean;
-import com.example.android.presenter.InternetPresenter;
+import com.example.android.presenter.homeFlagmentPresenter;
 import com.example.android.util.ConnectUtil;
 
 import org.json.JSONArray;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class BannerLoad {
 
-    private InternetPresenter mPresenter;
+    private homeFlagmentPresenter mPresenter;
     private List<BannerBean> mBannerBeanList=new ArrayList<>();
 
     private Handler handler = new Handler() {
@@ -36,7 +36,7 @@ public class BannerLoad {
         }
     };
 
-    public BannerLoad(InternetPresenter presenter){
+    public BannerLoad(homeFlagmentPresenter presenter){
         this.mPresenter=presenter;
     }
 

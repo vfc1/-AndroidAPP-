@@ -14,7 +14,8 @@ import static java.lang.Thread.sleep;
 public class ViewpagerTime {
 
     private ViewPager mViewPager;
-    private Boolean mBool=true;
+    //用来判断结束线程
+    private boolean run=true;
 
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
@@ -35,10 +36,11 @@ public class ViewpagerTime {
 
 
     public void clockStart(){
+        run=true;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (mBool){
+                while (run){
                     Message message=new Message();
                     message.what=1;
                     handler.sendMessage(message);
@@ -55,6 +57,6 @@ public class ViewpagerTime {
     }
 
     public void stop(){
-        mBool=false;
+        run=false;
     }
 }

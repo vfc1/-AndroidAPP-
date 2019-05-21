@@ -1,15 +1,16 @@
 package com.example.android.util;
 
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
-import com.example.android.presenter.InternetPresenter;
+import com.example.android.service.ArticleLoad;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +18,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.zip.InflaterInputStream;
 
 public class ConnectUtil {
     public static HttpURLConnection connect(String website){
@@ -80,5 +80,7 @@ public class ConnectUtil {
         }
         return response.toString();
     }
+
+
 }
 

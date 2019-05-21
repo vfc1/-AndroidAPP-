@@ -1,9 +1,7 @@
 package com.example.android.view;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -18,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -27,7 +24,7 @@ import com.example.android.adapter.AticleViewAdapter;
 import com.example.android.adapter.BannerAdapter;
 import com.example.android.bean.ArticleBean;
 import com.example.android.bean.BannerBean;
-import com.example.android.presenter.InternetPresenter;
+import com.example.android.presenter.homeFlagmentPresenter;
 
 import java.util.ArrayList;
 
@@ -36,7 +33,7 @@ import java.util.List;
 public class  HomeFragment extends Fragment {
 
     private AticleViewAdapter madapter;
-    private InternetPresenter mpresenter;
+    private homeFlagmentPresenter mpresenter;
     private Activity mActivity;
     private SwipeRefreshLayout swipeRefresh;
     private final String web1="https://www.wanandroid.com/article/list/";
@@ -48,6 +45,8 @@ public class  HomeFragment extends Fragment {
     private RelativeLayout relativeLayout;
     //判断是否为下拉
     private Boolean down=true;
+    //用来给onstart方法判断是不是第一次开始活动
+    private boolean start=true;
 
     private List<View> mViewList=new ArrayList<View>();
 
@@ -85,7 +84,7 @@ public class  HomeFragment extends Fragment {
                              Bundle saveInstanceState){
         View view=inflater.inflate(R.layout.home_fragment,container,false);
         mActivity=(Activity)getContext();
-        mpresenter=new InternetPresenter(mActivity,this);
+        mpresenter=new homeFlagmentPresenter(mActivity,this);
 /////////////////////////////////////////////////
         mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
  /////////////////////////////////////////////////////
@@ -141,6 +140,7 @@ public class  HomeFragment extends Fragment {
     }
 
     public void artitleRefresh(List<ArticleBean> homeArticleList){
+        this.i=0;
         if(mHomeArticleList!=null&&down){
             mHomeArticleList.clear();
         }
@@ -176,6 +176,15 @@ public class  HomeFragment extends Fragment {
             mViewList.add(imageButton);
         }
         bannerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(start==false){
+            viewpagerTime.clockStart();
+        }
+        start=false;
     }
 
     @Override
