@@ -3,6 +3,7 @@ package com.example.android.view;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -56,12 +57,11 @@ public class KnowLedgeDetailActivity extends AppCompatActivity {
             mViewList.add(listView);
         }
         //注意必须在给adapter添加list之后再添加添加给viewpager否则就应该增加刷新的代码，因为每次改变数据之后都要刷新，不然报错
-        mAdapter=new KnowArticlePager(mViewList);
+        mAdapter=new KnowArticlePager(mViewList,childName);
         viewPager.setAdapter(mAdapter);
-
-        for(int i=0;i<childName.size();i++){
-            tabLayout.addTab(tabLayout.newTab().setText(childName.get(i)));
-        }
+        //for(int i=0;i<childName.size();i++) {
+            //tabLayout.addTab(tabLayout.newTab().setText(childName.get(i)));
+       // }
         //关联
         tabLayout.setupWithViewPager(viewPager);
         //进入时选定的状态

@@ -1,11 +1,13 @@
 package com.example.android.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.R;
@@ -35,6 +37,18 @@ public class KnowledgeFragment extends Fragment {
         mAdapter=new KnowLegedListAdapter(getContext(),R.layout.knowledge_classification,mKnowledgeBeanList);
         load();
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                KnowledgeBean knowledgeBean=mKnowledgeBeanList.get(position);
+                Intent intent=new Intent(getContext(), KnowLedgeDetailActivity.class);
+                intent.putStringArrayListExtra("childName",(ArrayList<String>)knowledgeBean.getmChildName());
+                intent.putStringArrayListExtra("ID",(ArrayList<String>) knowledgeBean.getmID());
+                intent.putExtra("title",knowledgeBean.getMfatherName());
+                intent.putExtra("where",0);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 

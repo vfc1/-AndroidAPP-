@@ -1,6 +1,7 @@
 package com.example.android.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,15 @@ import java.util.List;
 public class KnowArticlePager extends PagerAdapter {
 
     private List<View> viewList;
+    private List<String> tabList;
 
     public KnowArticlePager(List<View> viewList) {
         this.viewList=viewList;
+    }
+
+    public KnowArticlePager(List<View> viewList,List<String> tabList){
+        this.viewList=viewList;
+        this.tabList=tabList;
     }
 
     @Override
@@ -36,6 +43,12 @@ public class KnowArticlePager extends PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         //当前位置和ViewPager中正显示的页面的位置的间隔是否超出一个页面，是则将当前页面移除
         container.removeView(viewList.get(position));
+    }
+
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return tabList.get(position);
     }
 }
 

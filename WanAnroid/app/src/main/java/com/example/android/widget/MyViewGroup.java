@@ -52,7 +52,7 @@ public class MyViewGroup extends ViewGroup {
             }
             y = rows * (height+margin_top+margin_bottom);
         }
-        setMeasuredDimension(actualWidth, y+30);
+        setMeasuredDimension(actualWidth, y+100);
     }
 
 

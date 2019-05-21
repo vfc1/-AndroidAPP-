@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -31,6 +32,7 @@ public class KnowLegedListAdapter extends ArrayAdapter<KnowledgeBean>  {
     private List<String> childName;
     private List<String> ID;
     private int i;
+    private List<List<Button>> mLists=new ArrayList<>();
 
     public KnowLegedListAdapter(Context context, int textViewResourceId, List<KnowledgeBean> objects){
         super(context,textViewResourceId,objects);
@@ -46,6 +48,7 @@ public class KnowLegedListAdapter extends ArrayAdapter<KnowledgeBean>  {
         childName=knowledgeBean.getmChildName();
         ID=knowledgeBean.getmID();
         final View view ;
+
         if(convertView==null){
             view= LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
             viewHolder=new ViewHolder();
@@ -60,33 +63,47 @@ public class KnowLegedListAdapter extends ArrayAdapter<KnowledgeBean>  {
         }
         viewHolder.textView.setText(knowledgeBean.getMfatherName());
         viewHolder.myViewGroup.removeAllViews();
-        for(i=0;i<childName.size();i++){
-            Button button=new Button(getContext());
-            button.setText(childName.get(i));
-            button.setTextSize(12);
-            button.setTextColor(view.getResources().getColor(R.color.colorOrange));
-            button.setMinWidth(0);//Button中的方法    改变Button(TextView)中的mMinWidth
-            button.setMinHeight(0);//Button中的方法   改变Button(TextView)中的mMinHeight
-            button.setMinimumHeight(0);//View中的方法 改变View中的mMinHeight
-            button.setMinimumWidth(0);//View中的方法  改变View中的mMinWidth
-            button.setMaxLines(1);//设置最大行数只能为一
-            //为按钮设置背景图片
-            Resources resources = getContext().getResources();
-            Drawable drawable = resources.getDrawable(R.drawable.rectangle);
-            button.setBackground(drawable);
-            final Intent intent=new Intent(getContext(), KnowLedgeDetailActivity.class);
-            intent.putStringArrayListExtra("childName",(ArrayList<String>)childName);
-            intent.putStringArrayListExtra("ID",(ArrayList<String>) ID);
-            intent.putExtra("where",i);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        if(mLists.size()>position){
+            List<Button> buttons=mLists.get(position);
+            for(int i=0;i<buttons.size();i++){
+                viewHolder.myViewGroup.addView(buttons.get(i));
+            }
+        }
+        else{
+            List<Button> buttons=new ArrayList<>();
+            for(i=0;i<childName.size();i++){
+                Button button=new Button(getContext());
+                button.setText(childName.get(i));
+                button.setTextSize(12);
+                button.setTextColor(view.getResources().getColor(R.color.colorOrange));
+                button.setMinWidth(0);//Button中的方法    改变Button(TextView)中的mMinWidth
+                button.setMinHeight(0);//Button中的方法   改变Button(TextView)中的mMinHeight
+                button.setMinimumHeight(0);//View中的方法 改变View中的mMinHeight
+                button.setMinimumWidth(0);//View中的方法  改变View中的mMinWidth
+                button.setMaxLines(1);//设置最大行数只能为一
+                //为按钮设置背景图片
+                Resources resources = getContext().getResources();
+                Drawable drawable = resources.getDrawable(R.drawable.rectangle);
+                button.setBackground(drawable);
+                //防止按钮强了listview的焦点
+                button.setFocusable(false);
+                final Intent intent=new Intent(getContext(), KnowLedgeDetailActivity.class);
+                intent.putStringArrayListExtra("childName",(ArrayList<String>)childName);
+                intent.putStringArrayListExtra("ID",(ArrayList<String>) ID);
+                intent.putExtra("where",i);
+                intent.putExtra("title",knowledgeBean.getMfatherName());
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
 
-                    getContext().startActivity(intent);
-                }
-            });
-           viewHolder.myViewGroup.addView(button);
+                        getContext().startActivity(intent);
+                    }
+                });
+                viewHolder.myViewGroup.addView(button);
+                buttons.add(button);
+            }
+            mLists.add(buttons);
         }
         return view;
     }
