@@ -81,6 +81,12 @@ public class ConnectUtil {
         return response.toString();
     }
 
+    public static boolean checkConnect(Context context){
+
+        ConnectivityManager connectivityManager= (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return mNetworkInfo != null;
+    }
 
 }
 

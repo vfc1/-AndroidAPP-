@@ -94,7 +94,7 @@ public class  HomeFragment extends Fragment {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadAticle(web1+0+web2,0);
+                loadAticle(web1+0+web2,-1);
                 mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
                 swipeRefresh.setRefreshing(false);
             }

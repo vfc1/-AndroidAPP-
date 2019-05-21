@@ -13,6 +13,7 @@ import com.example.android.bean.ArticleBean;
 import com.example.android.bean.BannerBean;
 import com.example.android.service.ArticleLoad;
 import com.example.android.service.BannerLoad;
+import com.example.android.util.ConnectUtil;
 import com.example.android.view.HomeFragment;
 
 import java.io.Serializable;
@@ -31,7 +32,7 @@ public class homeFlagmentPresenter implements Serializable {
     public void articleLoad(String website,int i){
         //判断是否有网络连接
 
-        if (checkConnect()) {
+        if (ConnectUtil.checkConnect(mActivity)) {
             new ArticleLoad(this,website,i);
         } else{
             connectionfailed("网络连接失败");
@@ -48,7 +49,7 @@ public class homeFlagmentPresenter implements Serializable {
     }
 
     public void bannerLoad(String website){
-        if (checkConnect()) {
+        if (ConnectUtil.checkConnect(mActivity)) {
             new BannerLoad(this).load(website);
         } else{
             connectionfailed("网络连接失败");
@@ -60,10 +61,4 @@ public class homeFlagmentPresenter implements Serializable {
         mHomeFragment.bannerRefresh(bannerBeanList);
     }
 
-    private boolean checkConnect(){
-
-        ConnectivityManager connectivityManager= (ConnectivityManager)mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo mNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return mNetworkInfo != null;
-    }
 }
