@@ -2,6 +2,7 @@ package com.example.android.bean;
 
 import android.graphics.drawable.Drawable;
 
+import com.example.android.presenter.homeFlagmentPresenter;
 import com.example.android.service.BannerPhotoLoad;
 
 public class BannerBean {
@@ -10,8 +11,8 @@ public class BannerBean {
     private String website;
 
     //拿到网址后开始获取图片，多线程下载，加快加载速度
-    public void setDrawable(String website) {
-        new BannerPhotoLoad(this,website);
+    public void setDrawable(String website, homeFlagmentPresenter presenter) {
+        new BannerPhotoLoad(this,website,presenter);
     }
 
     public void setDrawable(Drawable drawable) {

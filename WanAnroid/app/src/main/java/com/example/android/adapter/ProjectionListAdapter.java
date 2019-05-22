@@ -1,5 +1,6 @@
 package com.example.android.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -39,21 +40,37 @@ public class ProjectionListAdapter extends ArrayAdapter<ProjectionArticleBean> {
     @Override
     public View getView(int position,  View convertView,  ViewGroup parent) {
         ProjectionArticleBean articleBean=getItem(position);
-        View view= LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
-        TextView title=(TextView) view.findViewById(R.id.title);
-        TextView content=(TextView)view.findViewById(R.id.content);
-        TextView author=(TextView)view.findViewById(R.id.author);
-        TextView time=(TextView)view.findViewById(R.id.time);
-        ImageView picture=(ImageView)view.findViewById(R.id.picture);
-        title.setText(articleBean.getmTitle());
-        content.setText(articleBean.getmContent());
-        author.setText(articleBean.getmAuthor());
-        time.setText(articleBean.getmTime());
+        View view;
+        ViewHolder viewHolder;
+        if(convertView==null){
+            view= LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
+            viewHolder=new ViewHolder();
+            viewHolder.title =(TextView) view.findViewById(R.id.title);
+            viewHolder.content=(TextView)view.findViewById(R.id.content);
+            viewHolder.author=(TextView)view.findViewById(R.id.author);
+            viewHolder.time=(TextView)view.findViewById(R.id.time);
+            viewHolder.picture=(ImageView)view.findViewById(R.id.picture);
+
+        }else{
+            view=convertView;
+            viewHolder=(ViewHolder)view.getTag();
+        }
+
+        viewHolder.title.setText(articleBean.getmTitle());
+        viewHolder.content.setText(articleBean.getmContent());
+        viewHolder.author.setText(articleBean.getmAuthor());
+        viewHolder.time.setText(articleBean.getmTime());
         if(map.get(position)!=null){
-            picture.setImageDrawable(map.get(position));
+            viewHolder.picture.setImageDrawable(map.get(position));
         }else{
             mPresenter.loadPhoto(articleBean.getmPictureLink(),map,position,j);
         }
         return view;
     }
+
+    class ViewHolder{
+        TextView title,content,author,time;
+        ImageView picture;
+    }
+
 }

@@ -57,8 +57,8 @@ public class homeFlagmentPresenter implements Serializable {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void bannerRefresh(List<BannerBean> bannerBeanList){
-        mHomeFragment.bannerRefresh(bannerBeanList);
+    public void bannerRefresh(BannerBean bannerBean){
+        mHomeFragment.bannerRefresh(bannerBean);
     }
 
 }

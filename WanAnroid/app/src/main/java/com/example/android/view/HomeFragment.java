@@ -46,6 +46,7 @@ public class  HomeFragment extends Fragment {
     private RelativeLayout relativeLayout;
     //判断是否为下拉
     private Boolean down=true;
+    private boolean down1=false;
     //用来给onstart方法判断是不是第一次开始活动
     private boolean start=true;
 
@@ -99,6 +100,7 @@ public class  HomeFragment extends Fragment {
                 mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
                 swipeRefresh.setRefreshing(false);
                 down=true;
+                down1=true;
             }
         });
 
@@ -159,24 +161,36 @@ public class  HomeFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void bannerRefresh(List<BannerBean> bannerBeanList){
+    public void bannerRefresh(final BannerBean bannerBean){
 
-        if(mViewList!=null){mViewList.clear();}
-        for(int i=0;i<bannerBeanList.size();i++) {
-            mBannerBean=bannerBeanList.get(i);
-            ImageButton imageButton = new ImageButton(mActivity);
-            imageButton.setBackground(mBannerBean.getDrawable());
-            imageButton.setScaleType(ImageView.ScaleType.FIT_XY);
-            imageButton.setOnClickListener(new Button.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent=new Intent(mActivity,WebActivity.class);
-                    intent.putExtra("website",mBannerBean.getWebsite());
-                    startActivity(intent);
-                }
-            });
-            mViewList.add(imageButton);
-        }
+        if(mViewList!=null&down1){mViewList.clear();down1=false;}
+       // for(int i=0;i<bannerBeanList.size();i++) {
+        //    mBannerBean=bannerBeanList.get(i);
+          //  ImageButton imageButton = new ImageButton(mActivity);
+            //imageButton.setBackground(mBannerBean.getDrawable());
+        //    imageButton.setScaleType(ImageView.ScaleType.FIT_XY);
+         //   imageButton.setOnClickListener(new Button.OnClickListener() {
+          //      @Override
+             //   public void onClick(View v) {
+         //           Intent intent=new Intent(mActivity,WebActivity.class);
+         //           intent.putExtra("website",mBannerBean.getWebsite());
+         //           startActivity(intent);
+          //      }
+        //    });
+        //    mViewList.add(imageButton);
+        //}
+        ImageButton imageButton = new ImageButton(mActivity);
+        imageButton.setBackground(bannerBean.getDrawable());
+        imageButton.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageButton.setOnClickListener(new Button.OnClickListener() {
+                  @Override
+               public void onClick(View v) {
+                       Intent intent=new Intent(mActivity,WebActivity.class);
+                       intent.putExtra("website",bannerBean.getWebsite());
+                       startActivity(intent);
+                  }
+                });
+        mViewList.add(imageButton);
         bannerAdapter.notifyDataSetChanged();
     }
 

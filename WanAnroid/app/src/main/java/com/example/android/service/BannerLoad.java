@@ -21,14 +21,13 @@ import java.util.List;
 public class BannerLoad {
 
     private homeFlagmentPresenter mPresenter;
-    private List<BannerBean> mBannerBeanList=new ArrayList<>();
-
+    private BannerBean mBannerBean;
     private Handler handler = new Handler() {
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    mPresenter.bannerRefresh(mBannerBeanList);
+                    mBannerBean.setDrawable((String)msg.obj,mPresenter);
                     break;
                 default:
                     break;
@@ -48,15 +47,12 @@ public class BannerLoad {
                 HttpURLConnection connection=ConnectUtil.connect(website);
                 String jsonData=ConnectUtil.read(connection);
                 parseJSON(jsonData);
-                try {
-                    Thread.sleep(6000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Log.i("bannerload","进程进入睡眠失败");
-                }
-                Message message=new Message();
-                message.what=1;
-                handler.sendMessage(message);
+                //try {
+               //     Thread.sleep(6000);
+               // } catch (InterruptedException e) {
+                //    e.printStackTrace();
+               //     Log.i("bannerload","进程进入睡眠失败");
+              //  }
             }
         }).start();
 
@@ -69,10 +65,13 @@ public class BannerLoad {
             JSONArray jsonArray=new JSONArray(jsonObject1.getString("data"));
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                BannerBean bannerBean=new BannerBean();
-                bannerBean.setDrawable(jsonObject.getString("imagePath"));
-                bannerBean.setWebsite(jsonObject.getString("url"));
-                mBannerBeanList.add(bannerBean);
+                mBannerBean=new BannerBean();
+                Message message=new Message();
+                message.what=1;
+                message.obj=jsonObject.getString("imagePath");
+                handler.sendMessage(message);
+                //bannerBean.setDrawable(jsonObject.getString("imagePath"),mPresenter);
+                mBannerBean.setWebsite(jsonObject.getString("url"));
             }
 
         } catch (JSONException e) {
