@@ -1,22 +1,27 @@
 package com.example.android.presenter;
 
+import android.graphics.drawable.Drawable;
 import android.widget.Toast;
 
 import com.example.android.bean.ProjectionArticleBean;
 import com.example.android.bean.ProjectonBean;
 import com.example.android.service.ProjectionArticleLoad;
 import com.example.android.service.ProjectionLoad;
+import com.example.android.service.ProjectionPhoto;
 import com.example.android.util.ConnectUtil;
 import com.example.android.view.ProjectionFragment;
 
 import java.util.List;
+import java.util.Map;
 
 public class ProjectionPresenter {
 
     private ProjectionFragment mProjectionFragment;
+    private ProjectionPhoto projectionPhoto;
 
     public ProjectionPresenter(ProjectionFragment projectionFragment){
         this.mProjectionFragment=projectionFragment;
+        projectionPhoto=new ProjectionPhoto(this);
     }
 
     public void projectLoad(){
@@ -47,6 +52,14 @@ public class ProjectionPresenter {
     public void articleResult(List<ProjectionArticleBean> projectionArticleBeans,int i){
         mProjectionFragment.refreashArticle(projectionArticleBeans,i);
 
+    }
+    //i为第几个图片,j为第几个listview
+    public void loadPhoto(String website, Map<Integer,Drawable> map, int i,int j){
+        projectionPhoto.load(website,map,i,j);
+    }
+
+    public void listPhotoRefresh(int i){
+        mProjectionFragment.refreashDrawble(i);
     }
 
 }

@@ -85,6 +85,7 @@ public class ProjectionArticleLoad {
                 articleBean.setmAuthor(jsonObject.getString("author"));
                 articleBean.setmTime(jsonObject.getString("niceDate"));
                 articleBean.setmWebsite(jsonObject.getString("link"));
+                articleBean.setmPictureLink(jsonObject.getString("envelopePic"));
                 mProjectionArticleBeans.add(articleBean);
             }
             Message message=new Message();

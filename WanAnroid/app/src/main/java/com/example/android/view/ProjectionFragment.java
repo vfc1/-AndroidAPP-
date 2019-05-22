@@ -1,6 +1,7 @@
 package com.example.android.view;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -60,7 +61,7 @@ public class ProjectionFragment extends Fragment {
             mTitles.add(projectonBean.getName());
             final List<ProjectionArticleBean> articleBeans=new ArrayList<>();
             ListView listView=new ListView(getContext());
-            ProjectionListAdapter adapter=new ProjectionListAdapter(getContext(),R.layout.projection_listview,articleBeans);
+            ProjectionListAdapter adapter=new ProjectionListAdapter(getContext(),R.layout.projection_listview,articleBeans,mPresenter,i);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -88,5 +89,9 @@ public class ProjectionFragment extends Fragment {
         //viewpager和listview的数据都刷新
         adapter.notifyDataSetChanged();
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void refreashDrawble(int i){
+        mArticleadapters.get(i).notifyDataSetChanged();
     }
 }
