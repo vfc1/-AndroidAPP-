@@ -68,15 +68,27 @@ public class ConnectUtil {
     public static String read(HttpURLConnection connection) {
 
         StringBuilder response = new StringBuilder();
-
+        BufferedReader reader=null;
         String line;
-        try (   InputStream in=connection.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+        try  {
+            InputStream in=connection.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(in));
             while ((line = reader.readLine()) != null) {
                 response.append(line);
             }
         } catch (IOException e1) {
             e1.printStackTrace();
+        }finally {
+            if(reader!=null){
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(connection!=null){
+                connection.disconnect();
+            }
         }
         return response.toString();
     }

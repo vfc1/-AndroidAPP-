@@ -108,7 +108,6 @@ public class KnowLegedListAdapter extends ArrayAdapter<KnowledgeBean>  {
         return view;
     }
 
-
     class ViewHolder{
         TextView textView;
         MyViewGroup myViewGroup;

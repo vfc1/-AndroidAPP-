@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.R;
@@ -49,10 +50,19 @@ public class KnowLedgeDetailActivity extends AppCompatActivity {
         for(int i=0;i< Id.size();i++){
             mPresenter.articleLoad(web1+0+web2+ Id.get(i),i);
             ListView listView=new ListView(this);
-            List<ArticleBean> articleBeanList=new ArrayList<>();
+            final List<ArticleBean> articleBeanList=new ArrayList<>();
             lists.add(articleBeanList);
             AticleViewAdapter aticleViewAdapter=new AticleViewAdapter(this,R.layout.article_item,articleBeanList);
             listView.setAdapter(aticleViewAdapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    ArticleBean article=articleBeanList.get(position);
+                    Intent intent=new Intent(KnowLedgeDetailActivity.this,WebActivity.class);
+                    intent.putExtra("website",article.getmWebsite());
+                    startActivity(intent);
+                }
+            });
             mLIistadapter.add(aticleViewAdapter);
             mViewList.add(listView);
         }

@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.example.android.bean.ArticleBean;
 import com.example.android.service.ArticleLoad;
+import com.example.android.util.ConnectUtil;
 import com.example.android.view.KnowLedgeDetailActivity;
 
 import java.util.List;
@@ -30,6 +31,8 @@ public class KnowDetailPresenter {
 
     //开启线程下载文章
     public void articleLoad(String website,int i){
-        new ArticleLoad(this,website,i);
+        if(ConnectUtil.checkConnect(mKnowLedgeDetailActivity)){new ArticleLoad(this,website,i);}
+        else{connectionfailed("网络连接失败");}
+
     }
 }

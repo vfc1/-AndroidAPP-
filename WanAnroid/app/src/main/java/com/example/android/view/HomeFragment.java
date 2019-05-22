@@ -38,6 +38,7 @@ public class  HomeFragment extends Fragment {
     private SwipeRefreshLayout swipeRefresh;
     private final String web1="https://www.wanandroid.com/article/list/";
     private final String web2="/json";
+    //判断页数
     private int i=0;
     private ViewPager viewPager;
     private BannerBean mBannerBean;
@@ -97,10 +98,11 @@ public class  HomeFragment extends Fragment {
                 loadAticle(web1+0+web2,-1);
                 mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
                 swipeRefresh.setRefreshing(false);
+                down=true;
             }
         });
 
-        loadAticle(web1+i+web2,i);
+        loadAticle(web1+i+web2,-1);
         madapter= new AticleViewAdapter(mActivity, R.layout.article_item, mHomeArticleList);
         ListView listView=(ListView)view.findViewById(R.id.list_view);
         listView.setAdapter(madapter);
@@ -140,8 +142,8 @@ public class  HomeFragment extends Fragment {
     }
 
     public void artitleRefresh(List<ArticleBean> homeArticleList){
-        this.i=0;
         if(mHomeArticleList!=null&&down){
+            this.i=0;
             mHomeArticleList.clear();
         }
         for(int i=0;i<homeArticleList.size();i++){
@@ -149,7 +151,7 @@ public class  HomeFragment extends Fragment {
         }
         relativeLayout.setPadding(0,-relativeLayout.getHeight(),0,0);
         madapter.notifyDataSetChanged();
-        down=true;
+        down=false;
     }
 
     public void loadAticle(String website,int i){
