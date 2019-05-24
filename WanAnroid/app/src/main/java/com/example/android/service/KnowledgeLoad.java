@@ -45,7 +45,7 @@ public class KnowledgeLoad {
             @Override
             public void run() {
 
-                String jsonData = ConnectUtil.read(ConnectUtil.connect(website));
+                String jsonData = ConnectUtil.read(ConnectUtil.connect(website,"GET"));
                 if(jsonData==null){
                     Message message=new Message();
                     message.what=3;

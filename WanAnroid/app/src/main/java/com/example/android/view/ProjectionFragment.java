@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,6 +42,34 @@ public class ProjectionFragment extends Fragment {
     private List<List<ProjectionArticleBean>> lists=new ArrayList<>();
     private KnowArticlePager mAdapter;
     private List<String> mTitles=new ArrayList<>();
+    private List<Integer> integers=new ArrayList<>();
+    private List<String> Id=new ArrayList<>();
+
+    AbsListView.OnScrollListener scrollListener=new AbsListView.OnScrollListener() {
+
+        boolean isLastRow = false;
+
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+            //当滚到最后一行且停止滚动时，执行加载
+            if (isLastRow && scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                int i=mViewPager.getCurrentItem();
+                int j=integers.get(i);
+                mPresenter.articleLoad(web1+j+web2+Id.get(i),i);
+                j++;
+                integers.set(i,j);
+                isLastRow = false;
+            }
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            //判断是否滚到最后一行
+            if (firstVisibleItem + visibleItemCount == totalItemCount && totalItemCount > 0) {
+                isLastRow = true;
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -57,12 +86,15 @@ public class ProjectionFragment extends Fragment {
     public void refreashProjection(List<ProjectonBean> projectonBeans){
         for(int i=0;i<projectonBeans.size();i++){
             ProjectonBean projectonBean=projectonBeans.get(i);
+            integers.add(2);
+            Id.add(projectonBean.getID());
             mPresenter.articleLoad(web1+1+web2+projectonBean.getID(),i);
             mTitles.add(projectonBean.getName());
             final List<ProjectionArticleBean> articleBeans=new ArrayList<>();
             ListView listView=new ListView(getContext());
             ProjectionListAdapter adapter=new ProjectionListAdapter(getContext(),R.layout.projection_listview,articleBeans,mPresenter,i);
             listView.setAdapter(adapter);
+            listView.setOnScrollListener(scrollListener);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

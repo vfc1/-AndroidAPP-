@@ -10,8 +10,9 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="10dp"
         android:maxLines="2"
-        android:text="SBKDJD"
+        android:text="标题"
         android:textAllCaps="true"
+        android:textSize="15sp"
         android:textColor="#160606" />
 
     <TextView
@@ -23,8 +24,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="12dp"
         android:maxLines="1"
-        android:text="uvjh"
-        android:textSize="10sp" />
+        android:text="作者"
+        android:textSize="12sp" />
 
 
     <ImageView
@@ -47,7 +48,7 @@
         android:layout_toRightOf="@id/clock"
         android:maxLines="1"
         android:text="两小时前"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/type"
@@ -59,6 +60,6 @@
         android:maxLines="1"
         android:text="dewc"
         android:textColor="#EC6D6D"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
 </RelativeLayout>

@@ -48,7 +48,7 @@ public class ProjectionLoad {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void run() {
-                String jsonData =ConnectUtil.read( ConnectUtil.connect("https://www.wanandroid.com/project/tree/json"));
+                String jsonData =ConnectUtil.read( ConnectUtil.connect("https://www.wanandroid.com/project/tree/json","GET"));
                 if(jsonData==null){
                     Message message=new Message();
                     message.what=3;

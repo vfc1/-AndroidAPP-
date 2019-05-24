@@ -9,10 +9,16 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.example.android.bean.ArticleBean;
 import com.example.android.service.ArticleLoad;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -21,6 +27,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConnectUtil {
     public static HttpURLConnection connect(String website,String method){
@@ -33,7 +41,7 @@ public class ConnectUtil {
             connection.setConnectTimeout(8000);
             connection.setReadTimeout(8000);
             //获取输入流
-            InputStream in=connection.getInputStream();
+            //InputStream in=connection.getInputStream();
             return connection;
 
         } catch (Exception e) {
@@ -107,7 +115,7 @@ public class ConnectUtil {
         try  {
             if(connection!=null){
                 InputStream in=connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(in));
+                reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
@@ -115,6 +123,7 @@ public class ConnectUtil {
 
         } catch (IOException e1) {
             e1.printStackTrace();
+            return null;
         }finally {
             if(reader!=null){
                 try {
@@ -135,6 +144,28 @@ public class ConnectUtil {
         ConnectivityManager connectivityManager= (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return mNetworkInfo != null;
+    }
+
+    public static List<ArticleBean> parseJSON(String jsonData) {
+        List<ArticleBean> list = new ArrayList<>();
+        try {
+            JSONObject ajsonObject = new JSONObject(jsonData);
+            ajsonObject = new JSONObject(ajsonObject.getString("data"));
+            JSONArray jsonArray = new JSONArray(ajsonObject.getString("datas"));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                ArticleBean homeArticle = new ArticleBean();
+                homeArticle.setMtitle(jsonObject.getString("title"));
+                homeArticle.setMauthor(jsonObject.getString("author"));
+                homeArticle.setMreleaseTime(jsonObject.getString("niceDate"));
+                homeArticle.setType(jsonObject.getString("superChapterName") + "/" + jsonObject.getString("chapterName"));
+                homeArticle.setmWebsite(jsonObject.getString("link"));
+                list.add(homeArticle);
+            }
+        } catch (JSONException e) {
+            e.getStackTrace();
+        }
+        return list;
     }
 
 

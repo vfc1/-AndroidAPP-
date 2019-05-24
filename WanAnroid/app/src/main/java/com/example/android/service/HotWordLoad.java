@@ -50,7 +50,7 @@ public class HotWordLoad {
                 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                 @Override
                 public void run() {
-                    HttpURLConnection connection = ConnectUtil.connect("https://www.wanandroid.com//hotkey/json");
+                    HttpURLConnection connection = ConnectUtil.connect("https://www.wanandroid.com//hotkey/json","GET");
                     String jsonData = ConnectUtil.read(connection);
                     if(jsonData!=null){parseJSON(jsonData);}
                     else{

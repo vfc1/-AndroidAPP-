@@ -1,18 +1,30 @@
 package com.example.android.view;
 
+import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageButton;
 
 import com.example.android.R;
 
-public class WebActivity extends AppCompatActivity {
+public class WebActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private ImageButton mShare;
+    private ImageButton mCollect;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+        mShare=(ImageButton)findViewById(R.id.share);
+        mCollect=(ImageButton)findViewById(R.id.collection);
+        mShare.setOnClickListener(this);
+        mCollect.setOnClickListener(this);
         //内置一个浏览器
         WebView webView=(WebView)findViewById(R.id.web_view);
         //让webview支持javaScript脚本
@@ -26,5 +38,28 @@ public class WebActivity extends AppCompatActivity {
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
         webView.loadUrl(getIntent().getStringExtra("website"));
+        ActionBar actionBar=getSupportActionBar();
+        if(actionBar!=null){
+            actionBar.hide();
+        }
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.share:
+                Intent intent=new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_SUBJECT,"分享");
+                intent.putExtra(Intent.EXTRA_TEXT,getIntent().getStringExtra("website"));
+                startActivity(Intent.createChooser(intent,getTitle()));
+                 break;
+            case R.id.collection:
+
+                 break;
+             default:
+                 break;
+        }
     }
 }

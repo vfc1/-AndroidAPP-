@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -33,6 +34,35 @@ public class KnowLedgeDetailActivity extends AppCompatActivity {
     private List<List<ArticleBean>> lists=new ArrayList<>();
     private KnowDetailPresenter mPresenter;
     private KnowArticlePager mAdapter;
+    private ViewPager mViewPager;
+    private List<Integer> integers=new ArrayList<>();
+    private List<String> Id;
+
+    AbsListView.OnScrollListener scrollListener=new AbsListView.OnScrollListener() {
+
+        boolean isLastRow = false;
+
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+            //当滚到最后一行且停止滚动时，执行加载
+            if (isLastRow && scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                int i=mViewPager.getCurrentItem();
+                int j=integers.get(i);
+                mPresenter.articleLoad(web1+j+web2+Id.get(i),i);
+                j++;
+                integers.set(i,j);
+                isLastRow = false;
+            }
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            //判断是否滚到最后一行
+            if (firstVisibleItem + visibleItemCount == totalItemCount && totalItemCount > 0) {
+                isLastRow = true;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +72,18 @@ public class KnowLedgeDetailActivity extends AppCompatActivity {
         TabLayout tabLayout=(TabLayout)findViewById(R.id.mytab);
         intent=getIntent();
         List<String> childName= intent.getStringArrayListExtra("childName");
-        List<String> Id=intent.getStringArrayListExtra("ID");
+        Id=intent.getStringArrayListExtra("ID");
         int start=intent.getIntExtra("where",0);
-        ViewPager viewPager=(ViewPager) findViewById(R.id.view_pager);
+        mViewPager=(ViewPager) findViewById(R.id.view_pager);
         mPresenter=new KnowDetailPresenter(this);
 
         for(int i=0;i< Id.size();i++){
-            mPresenter.articleLoad(web1+0+web2+ Id.get(i),i);
+            int j=0;
+            mPresenter.articleLoad(web1+j+web2+ Id.get(i),i);
+            j++;
+            integers.add(j);
             ListView listView=new ListView(this);
+            listView.setOnScrollListener(scrollListener);
             final List<ArticleBean> articleBeanList=new ArrayList<>();
             lists.add(articleBeanList);
             AticleViewAdapter aticleViewAdapter=new AticleViewAdapter(this,R.layout.article_item,articleBeanList);
@@ -68,12 +102,12 @@ public class KnowLedgeDetailActivity extends AppCompatActivity {
         }
         //注意必须在给adapter添加list之后再添加添加给viewpager否则就应该增加刷新的代码，因为每次改变数据之后都要刷新，不然报错
         mAdapter=new KnowArticlePager(mViewList,childName);
-        viewPager.setAdapter(mAdapter);
+        mViewPager.setAdapter(mAdapter);
         //for(int i=0;i<childName.size();i++) {
             //tabLayout.addTab(tabLayout.newTab().setText(childName.get(i)));
        // }
         //关联
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(mViewPager);
         //进入时选定的状态
         tabLayout.getTabAt(start).select();
     }
@@ -86,4 +120,6 @@ public class KnowLedgeDetailActivity extends AppCompatActivity {
         mLIistadapter.get(i).notifyDataSetChanged();
         mAdapter.notifyDataSetChanged();
     }
+
+
 }

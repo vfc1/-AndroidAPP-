@@ -67,9 +67,9 @@ public class ArticleLoad {
             public void run() {
                 message.what = 1;
                 String topJSONdata = null;
-                String jsonData =ConnectUtil.read( ConnectUtil.connect(website));
+                String jsonData =ConnectUtil.read( ConnectUtil.connect(website,"GET"));
                 if (i == -1) {
-                    topJSONdata =ConnectUtil.read( ConnectUtil.connect("https://www.wanandroid.com/article/top/json"));
+                    topJSONdata =ConnectUtil.read( ConnectUtil.connect("https://www.wanandroid.com/article/top/json","GET"));
                 }
                 if (jsonData == null) {
                     message.what = 3;
@@ -77,10 +77,10 @@ public class ArticleLoad {
                 } else {
                     if (i == -1) {
                         parseTopJSON(topJSONdata);
-                        parseJSON(jsonData);
+                        listAdd(ConnectUtil.parseJSON(jsonData));
                         handler.sendMessage(message);
                     } else {
-                        parseJSON(jsonData);
+                        listAdd(ConnectUtil.parseJSON(jsonData));
                         handler.sendMessage(message);
                     }
                 }
@@ -89,29 +89,6 @@ public class ArticleLoad {
         }).start();
     }
 
-    private void parseJSON(String jsonData) {
-        try {
-            JSONObject ajsonObject = new JSONObject(jsonData);
-            ajsonObject = new JSONObject(ajsonObject.getString("data"));
-            JSONArray jsonArray = new JSONArray(ajsonObject.getString("datas"));
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                ArticleBean homeArticle = new ArticleBean();
-                homeArticle.setMtitle(jsonObject.getString("title"));
-                homeArticle.setMauthor(jsonObject.getString("author"));
-                homeArticle.setMreleaseTime(jsonObject.getString("niceDate"));
-                homeArticle.setType(jsonObject.getString("superChapterName") + "/" + jsonObject.getString("chapterName"));
-                homeArticle.setmWebsite(jsonObject.getString("link"));
-                mArticleList.add(homeArticle);
-            }
-        } catch (JSONException e) {
-            e.getStackTrace();
-            Message message1 = new Message();
-            message1.what = 2;
-            handler.sendMessage(message1);
-        }
-
-    }
 
     private void parseTopJSON(String jsonData) {
         try {
@@ -135,4 +112,9 @@ public class ArticleLoad {
         }
     }
 
+    private void listAdd(List<ArticleBean> list){
+        for(int i=0;i<list.size();i++){
+           mArticleList.add(list.get(i));
+        }
+    }
 }

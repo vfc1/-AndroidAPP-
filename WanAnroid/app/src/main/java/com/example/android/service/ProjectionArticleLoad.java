@@ -52,7 +52,7 @@ public class ProjectionArticleLoad {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void run() {
-                HttpURLConnection connection=ConnectUtil.connect(website);
+                HttpURLConnection connection=ConnectUtil.connect(website,"GET");
                 String jsonData=null;
                 if(connection!=null){jsonData = ConnectUtil.read(connection );}
                 else{

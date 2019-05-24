@@ -97,7 +97,7 @@ public class  HomeFragment extends Fragment {
             @Override
             public void onRefresh() {
                 loadAticle(web1+0+web2,-1);
-                //mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
+                mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
                 swipeRefresh.setRefreshing(false);
                 down=true;
                 down1=true;
@@ -126,10 +126,12 @@ public class  HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //因为添加了headview，占一个位置
-                ArticleBean homeArticle=mHomeArticleList.get(position-1);
-                Intent intent=new Intent(mActivity,WebActivity.class);
-                intent.putExtra("website",homeArticle.getmWebsite());
-                startActivity(intent);
+                if(position<=mHomeArticleList.size()) {
+                    ArticleBean homeArticle = mHomeArticleList.get(position - 1);
+                    Intent intent = new Intent(mActivity, WebActivity.class);
+                    intent.putExtra("website", homeArticle.getmWebsite());
+                    startActivity(intent);
+                }
             }
         });
         ////////////////////////////////////////////////////////

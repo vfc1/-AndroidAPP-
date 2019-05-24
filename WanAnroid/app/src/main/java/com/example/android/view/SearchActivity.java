@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.android.R;
 import com.example.android.presenter.SearchActivityPresenter;
@@ -32,8 +33,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private SearchTipsFragment searchTipsFragment;
     private SearchDetailFragment searchDetailFragment;
     private FragmentManager manager;
-    private EditText editText;
-    protected List<String> history=new ArrayList<>();
+    protected EditText editText;
+    private List<String> history=new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,19 +68,24 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.title_search:
                 String s=editText.getText().toString();
-                if(s!=""){
+                if(!s.equals("")){
                     if(history.contains(s)){history.remove(s);}
                     history.add(s);
+                    FragmentTransaction transaction1=manager.beginTransaction();
+                    transaction1.hide(searchTipsFragment);
+                    if(searchDetailFragment==null){
+                        searchDetailFragment=new SearchDetailFragment();
+                        transaction1.add(R.id.sheach_tips,searchDetailFragment);
+                    }else{
+                        transaction1.show(searchDetailFragment);
+                    }
+                    searchDetailFragment.mBool=true;
+                    searchDetailFragment.resultLoad(s);
+                    transaction1.commit();
                 }
-                FragmentTransaction transaction1=manager.beginTransaction();
-                transaction1.hide(searchTipsFragment);
-                if(searchDetailFragment==null){
-                    searchDetailFragment=new SearchDetailFragment();
-                    transaction1.add(R.id.sheach_tips,searchDetailFragment);
-                }else{
-                    transaction1.show(searchDetailFragment);
+                else{
+                    Toast.makeText(this,"请输入内容",Toast.LENGTH_LONG).show();
                 }
-                transaction1.commit();
                 break;
             case R.id.edit_query :
                 FragmentTransaction transaction2=manager.beginTransaction();

@@ -45,7 +45,7 @@ public class BannerLoad {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void run() {
-                HttpURLConnection connection=ConnectUtil.connect(website);
+                HttpURLConnection connection=ConnectUtil.connect(website,"GET");
                 String jsonData=ConnectUtil.read(connection);
                 parseJSON(jsonData);
                 //try {
