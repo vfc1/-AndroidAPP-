@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import com.example.android.bean.ArticleBean;
 import com.example.android.presenter.KnowDetailPresenter;

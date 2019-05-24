@@ -8,6 +8,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,6 @@ public class  HomeFragment extends Fragment {
     //判断页数
     private int i=0;
     private ViewPager viewPager;
-    private BannerBean mBannerBean;
     private  ViewpagerTime viewpagerTime;
     private RelativeLayout relativeLayout;
     //判断是否为下拉
@@ -97,7 +97,7 @@ public class  HomeFragment extends Fragment {
             @Override
             public void onRefresh() {
                 loadAticle(web1+0+web2,-1);
-                mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
+                //mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
                 swipeRefresh.setRefreshing(false);
                 down=true;
                 down1=true;
@@ -125,7 +125,8 @@ public class  HomeFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ArticleBean homeArticle=mHomeArticleList.get(position);
+                //因为添加了headview，占一个位置
+                ArticleBean homeArticle=mHomeArticleList.get(position-1);
                 Intent intent=new Intent(mActivity,WebActivity.class);
                 intent.putExtra("website",homeArticle.getmWebsite());
                 startActivity(intent);
@@ -163,7 +164,7 @@ public class  HomeFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void bannerRefresh(final BannerBean bannerBean){
 
-        if(mViewList!=null&down1){mViewList.clear();down1=false;}
+        if(mViewList!=null&&down1){mViewList.clear();down1=false;}
        // for(int i=0;i<bannerBeanList.size();i++) {
         //    mBannerBean=bannerBeanList.get(i);
           //  ImageButton imageButton = new ImageButton(mActivity);
@@ -182,11 +183,11 @@ public class  HomeFragment extends Fragment {
         ImageButton imageButton = new ImageButton(mActivity);
         imageButton.setBackground(bannerBean.getDrawable());
         imageButton.setScaleType(ImageView.ScaleType.FIT_XY);
+        final Intent intent=new Intent(mActivity,WebActivity.class);
+        intent.putExtra("website",bannerBean.getWebsite());
         imageButton.setOnClickListener(new Button.OnClickListener() {
                   @Override
                public void onClick(View v) {
-                       Intent intent=new Intent(mActivity,WebActivity.class);
-                       intent.putExtra("website",bannerBean.getWebsite());
                        startActivity(intent);
                   }
                 });

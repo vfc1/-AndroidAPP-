@@ -23,13 +23,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ConnectUtil {
-    public static HttpURLConnection connect(String website){
+    public static HttpURLConnection connect(String website,String method){
         HttpURLConnection connection=null;
 
         try {
             URL url=new URL(website);
             connection=(HttpURLConnection)url.openConnection();
-            connection.setRequestMethod("GET");
+            connection.setRequestMethod(method);
             connection.setConnectTimeout(8000);
             connection.setReadTimeout(8000);
             //获取输入流
@@ -49,7 +49,7 @@ public class ConnectUtil {
         HttpURLConnection connection1=null;
 
         try{
-            connection1=connect(website);
+            connection1=connect(website,"GET");
             InputStream in = connection1.getInputStream();
             if (in != null) {
                 //获取到字节数组
@@ -105,11 +105,14 @@ public class ConnectUtil {
         BufferedReader reader=null;
         String line;
         try  {
-            InputStream in=connection.getInputStream();
-            reader = new BufferedReader(new InputStreamReader(in));
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
+            if(connection!=null){
+                InputStream in=connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(in));
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
             }
+
         } catch (IOException e1) {
             e1.printStackTrace();
         }finally {

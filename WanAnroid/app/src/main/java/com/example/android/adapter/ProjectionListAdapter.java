@@ -50,6 +50,7 @@ public class ProjectionListAdapter extends ArrayAdapter<ProjectionArticleBean> {
             viewHolder.author=(TextView)view.findViewById(R.id.author);
             viewHolder.time=(TextView)view.findViewById(R.id.time);
             viewHolder.picture=(ImageView)view.findViewById(R.id.picture);
+            view.setTag(viewHolder);
 
         }else{
             view=convertView;

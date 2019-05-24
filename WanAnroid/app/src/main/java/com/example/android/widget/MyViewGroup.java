@@ -19,6 +19,8 @@ public class MyViewGroup extends ViewGroup {
     private int top=10;
     private int bottom=10;
 
+    private int increase=0;
+
     public MyViewGroup(Context context) {
         super(context);
     }
@@ -52,7 +54,7 @@ public class MyViewGroup extends ViewGroup {
             }
             y = rows * (height+margin_top+margin_bottom);
         }
-        setMeasuredDimension(actualWidth, y+100);
+        setMeasuredDimension(actualWidth, y+100+increase);
     }
 
 
@@ -97,5 +99,10 @@ public class MyViewGroup extends ViewGroup {
         this.top=top;
         this.right=right;
         this.bottom=bottom;
+    }
+
+    public void increaseY(int i){
+
+        increase=i;
     }
 }

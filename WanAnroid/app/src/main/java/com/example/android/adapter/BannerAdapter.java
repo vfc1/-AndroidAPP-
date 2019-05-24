@@ -40,6 +40,8 @@ public class BannerAdapter extends PagerAdapter {
         if(viewList.size()!=0) {
             position = position % viewList.size();
         }
+        //
+        container.removeView(viewList.get(position));
         container.addView(viewList.get(position));
         return viewList.get(position);
     }

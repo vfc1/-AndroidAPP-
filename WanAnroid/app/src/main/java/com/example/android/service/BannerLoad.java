@@ -1,5 +1,6 @@
 package com.example.android.service;
 
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -21,13 +22,13 @@ import java.util.List;
 public class BannerLoad {
 
     private homeFlagmentPresenter mPresenter;
-    private BannerBean mBannerBean;
+    private List<BannerBean> bannerBeanList=new ArrayList<>();
     private Handler handler = new Handler() {
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    mBannerBean.setDrawable((String)msg.obj,mPresenter);
+                    bannerBeanList.get(msg.arg1).setDrawable((String)msg.obj,mPresenter);
                     break;
                 default:
                     break;
@@ -65,13 +66,15 @@ public class BannerLoad {
             JSONArray jsonArray=new JSONArray(jsonObject1.getString("data"));
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                mBannerBean=new BannerBean();
+                BannerBean bannerBean=new BannerBean();
+                //bannerBean.setDrawable(jsonObject.getString("imagePath"),mPresenter);
+                bannerBean.setWebsite(jsonObject.getString("url"));
+                bannerBeanList.add(bannerBean);
                 Message message=new Message();
                 message.what=1;
+                message.arg1=i;
                 message.obj=jsonObject.getString("imagePath");
                 handler.sendMessage(message);
-                //bannerBean.setDrawable(jsonObject.getString("imagePath"),mPresenter);
-                mBannerBean.setWebsite(jsonObject.getString("url"));
             }
 
         } catch (JSONException e) {
