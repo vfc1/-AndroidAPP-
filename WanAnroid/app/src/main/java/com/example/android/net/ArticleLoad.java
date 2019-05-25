@@ -1,14 +1,13 @@
-package com.example.android.service;
+package com.example.android.net;
 
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import com.example.android.bean.ArticleBean;
+import com.example.android.presenter.CollectionPresenter;
 import com.example.android.presenter.KnowDetailPresenter;
-import com.example.android.presenter.KnowledgeFragPresenter;
 import com.example.android.presenter.homeFlagmentPresenter;
 import com.example.android.util.ConnectUtil;
 
@@ -23,6 +22,7 @@ public class ArticleLoad {
 
     private homeFlagmentPresenter mHomePresenter=null;
     private KnowDetailPresenter mKnowPresenter=null;
+    private CollectionPresenter mCollectionPresenter=null;
     private List<ArticleBean> mArticleList = new ArrayList<>();
     private Message message = new Message();
     //记录第几个标签
@@ -31,17 +31,35 @@ public class ArticleLoad {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    if(mKnowPresenter==null){mHomePresenter.articleResult(mArticleList);}
-                    else{mKnowPresenter.articleResult(mArticleList,tab);}
-
+                    if (mKnowPresenter != null) {
+                        mKnowPresenter.articleResult(mArticleList, tab);
+                    }
+                    if (mHomePresenter != null) {
+                        mHomePresenter.articleResult(mArticleList);
+                    } else {
+                        mCollectionPresenter.refreash(mArticleList);
+                    }
                     break;
                 case 2:
-                    if(mKnowPresenter==null){mHomePresenter.connectionfailed("数据解析失败");}
-                    else{mKnowPresenter.connectionfailed("数据解析失败");}
+
+                    if (mKnowPresenter != null) {
+                        mKnowPresenter.connectionfailed("数据解析失败");
+                    }
+                    if (mHomePresenter != null) {
+                        mHomePresenter.connectionfailed("数据解析失败");
+                    } else {
+                        mCollectionPresenter.connectionfailed("数据解析失败");
+                    }
                     break;
                 case 3:
-                    if(mKnowPresenter==null){mHomePresenter.connectionfailed("网络连接失败");}
-                    else{mKnowPresenter.connectionfailed("网络连接失败");}
+                    if (mHomePresenter != null) {
+                        mHomePresenter.connectionfailed("网络连接失败");
+                    }
+                    if (mKnowPresenter != null) {
+                        mKnowPresenter.connectionfailed("网络连接失败");
+                    } else {
+                        mCollectionPresenter.connectionfailed("网络连接失败");
+                    }
                 default:
                     break;
             }
@@ -55,12 +73,16 @@ public class ArticleLoad {
 
     }
 
+    public ArticleLoad(CollectionPresenter presenter){
+       mCollectionPresenter=presenter;
+    }
+
     public ArticleLoad(homeFlagmentPresenter presenter,  String website,int i) {
         this.mHomePresenter = presenter;
         load(website, i);
     }
 
-    private void load(final String website, final int i){
+    public void load(final String website, final int i){
         new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override

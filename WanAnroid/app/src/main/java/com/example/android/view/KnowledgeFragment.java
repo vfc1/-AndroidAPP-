@@ -24,7 +24,7 @@ public class KnowledgeFragment extends Fragment {
     private View view;
     private KnowledgeFragPresenter mPresenter;
     private Activity mActivity;
-    private List<KnowledgeBean> mKnowledgeBeanList=new ArrayList<>();
+    private List<KnowledgeBean> mKnowledgeBeanList=new ArrayList<>();//存放体系每一个框的信息
     private ListView mListView;
     private KnowLegedListAdapter mAdapter;
 

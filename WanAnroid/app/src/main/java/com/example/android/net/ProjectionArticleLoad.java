@@ -1,4 +1,4 @@
-package com.example.android.service;
+package com.example.android.net;
 
 import android.os.Build;
 import android.os.Handler;

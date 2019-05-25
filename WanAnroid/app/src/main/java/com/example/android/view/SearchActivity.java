@@ -34,6 +34,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private SearchDetailFragment searchDetailFragment;
     private FragmentManager manager;
     protected EditText editText;
+    //存放历史记录
     private List<String> history=new ArrayList<>();
 
 
@@ -79,9 +80,10 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     }else{
                         transaction1.show(searchDetailFragment);
                     }
+                    transaction1.commit();
                     searchDetailFragment.mBool=true;
                     searchDetailFragment.resultLoad(s);
-                    transaction1.commit();
+
                 }
                 else{
                     Toast.makeText(this,"请输入内容",Toast.LENGTH_LONG).show();
@@ -110,6 +112,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    //清空历史
     public void historyClear(){
         history.clear();
         @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor=getSharedPreferences("history",MODE_PRIVATE).edit();

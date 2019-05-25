@@ -87,9 +87,8 @@ public class  HomeFragment extends Fragment {
         View view=inflater.inflate(R.layout.home_fragment,container,false);
         mActivity=(Activity)getContext();
         mpresenter=new homeFlagmentPresenter(mActivity,this);
-/////////////////////////////////////////////////
+        //下载首页banner图
         mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
- /////////////////////////////////////////////////////
         swipeRefresh=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorBulue);
 
@@ -103,12 +102,11 @@ public class  HomeFragment extends Fragment {
                 down1=true;
             }
         });
-
+        //下载首页文章，-1比较把置顶文章拼接在开头
         loadAticle(web1+i+web2,-1);
         madapter= new AticleViewAdapter(mActivity, R.layout.article_item, mHomeArticleList);
         ListView listView=(ListView)view.findViewById(R.id.list_view);
         listView.setAdapter(madapter);
-        ////////////////////////////
         viewPager=(ViewPager)getLayoutInflater().inflate(
         R.layout.view_pager_item,  null );
         bannerAdapter=new BannerAdapter(mViewList,viewPager);
@@ -121,7 +119,7 @@ public class  HomeFragment extends Fragment {
         viewPager.requestDisallowInterceptTouchEvent(true);
         //开始计时，自动切换图片
         viewpagerTime= new ViewpagerTime(viewPager);
-        /////////////////////
+        //为listview设置监视器
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -134,18 +132,20 @@ public class  HomeFragment extends Fragment {
                 }
             }
         });
-        ////////////////////////////////////////////////////////
+        //在listview底部添加一个正在加载的布局
         relativeLayout =(RelativeLayout) getLayoutInflater().inflate(
                 R.layout.loading_item,  null );
         relativeLayout.setLayoutParams(new  ListView.LayoutParams(
                 ListView.LayoutParams.MATCH_PARENT,150));
         listView.addFooterView(relativeLayout);
+        //将该布局隐藏
         relativeLayout.setPadding(0,-relativeLayout.getHeight(),0,0);
+        //为listview的滑动设置监视器
         listView.setOnScrollListener(scrollListener);
-        /////////////////////////////////////////////////////
         return view;
     }
 
+    //文章列表的刷新
     public void artitleRefresh(List<ArticleBean> homeArticleList){
         if(mHomeArticleList!=null&&down){
             this.i=0;
@@ -159,29 +159,16 @@ public class  HomeFragment extends Fragment {
         down=false;
     }
 
+    //开始下载文章，i为页数
     public void loadAticle(String website,int i){
         mpresenter.articleLoad(website,i);
     }
 
+    //刷新首页轮播图
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void bannerRefresh(final BannerBean bannerBean){
-
+        //如果是刷新则把所有图片全部删除
         if(mViewList!=null&&down1){mViewList.clear();down1=false;}
-       // for(int i=0;i<bannerBeanList.size();i++) {
-        //    mBannerBean=bannerBeanList.get(i);
-          //  ImageButton imageButton = new ImageButton(mActivity);
-            //imageButton.setBackground(mBannerBean.getDrawable());
-        //    imageButton.setScaleType(ImageView.ScaleType.FIT_XY);
-         //   imageButton.setOnClickListener(new Button.OnClickListener() {
-          //      @Override
-             //   public void onClick(View v) {
-         //           Intent intent=new Intent(mActivity,WebActivity.class);
-         //           intent.putExtra("website",mBannerBean.getWebsite());
-         //           startActivity(intent);
-          //      }
-        //    });
-        //    mViewList.add(imageButton);
-        //}
         ImageButton imageButton = new ImageButton(mActivity);
         imageButton.setBackground(bannerBean.getDrawable());
         imageButton.setScaleType(ImageView.ScaleType.FIT_XY);

@@ -28,15 +28,14 @@ public class KnowLedgeDetailActivity extends AppCompatActivity {
     private Intent intent;
     private final String web1="https://www.wanandroid.com/article/list/";
     private final String web2="/json?cid=";
-    private int i=0;
     private List<View> mViewList=new ArrayList<>();
-    private List<AticleViewAdapter> mLIistadapter=new ArrayList<>();
-    private List<List<ArticleBean>> lists=new ArrayList<>();
+    private List<AticleViewAdapter> mLIistadapter=new ArrayList<>();//按顺序储存listview的适配器
+    private List<List<ArticleBean>> lists=new ArrayList<>();//存每一个listview的内容的地址
     private KnowDetailPresenter mPresenter;
     private KnowArticlePager mAdapter;
     private ViewPager mViewPager;
-    private List<Integer> integers=new ArrayList<>();
-    private List<String> Id;
+    private List<Integer> integers=new ArrayList<>();//记录每一个listview的页数
+    private List<String> Id;//记录每个listview的网址的id
 
     AbsListView.OnScrollListener scrollListener=new AbsListView.OnScrollListener() {
 

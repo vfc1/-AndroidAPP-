@@ -32,7 +32,7 @@ public class KnowLegedListAdapter extends ArrayAdapter<KnowledgeBean>  {
     private List<String> childName;
     private List<String> ID;
     private int i;
-    private List<List<Button>> mLists=new ArrayList<>();
+    private List<List<Button>> mLists=new ArrayList<>();//储存加载完的按钮，下次直接使用，减少卡顿
 
     public KnowLegedListAdapter(Context context, int textViewResourceId, List<KnowledgeBean> objects){
         super(context,textViewResourceId,objects);

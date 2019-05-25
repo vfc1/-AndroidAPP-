@@ -5,9 +5,9 @@ import android.widget.Toast;
 
 import com.example.android.bean.ProjectionArticleBean;
 import com.example.android.bean.ProjectonBean;
-import com.example.android.service.ProjectionArticleLoad;
-import com.example.android.service.ProjectionLoad;
-import com.example.android.service.ProjectionPhoto;
+import com.example.android.net.ProjectionArticleLoad;
+import com.example.android.net.ProjectionLoad;
+import com.example.android.net.ProjectionPhoto;
 import com.example.android.util.ConnectUtil;
 import com.example.android.view.ProjectionFragment;
 
@@ -24,6 +24,7 @@ public class ProjectionPresenter {
         projectionPhoto=new ProjectionPhoto(this);
     }
 
+    //下载项目的信息
     public void projectLoad(){
         if(ConnectUtil.checkConnect(mProjectionFragment.getContext())){
             new ProjectionLoad(this);
@@ -32,6 +33,7 @@ public class ProjectionPresenter {
 
     }
 
+    //下载项目目录下的文章
     public void articleLoad(String website,int i){
         if(ConnectUtil.checkConnect(mProjectionFragment.getContext())){
             new ProjectionArticleLoad(this,website,i);
@@ -39,6 +41,7 @@ public class ProjectionPresenter {
         else{connectionfailed("网络连接失败");}
     }
 
+    //发生错误
     public void connectionfailed(String error){
         Toast.makeText(mProjectionFragment.getContext(),error,Toast.LENGTH_LONG).show();
     }
@@ -58,6 +61,7 @@ public class ProjectionPresenter {
         projectionPhoto.load(website,map,i,j);
     }
 
+    //刷新项目模块下的listview
     public void listPhotoRefresh(int i){
         mProjectionFragment.refreashDrawble(i);
     }

@@ -35,14 +35,17 @@ public class ProjectionFragment extends Fragment {
     private final String web1="https://www.wanandroid.com/project/list/";
     private final String web2="/json?cid=";
     private ProjectionPresenter mPresenter;
-    private List<ProjectonBean> mProjectonBeans=new ArrayList<>();
     private ViewPager mViewPager;
     private List<View> viewList=new ArrayList<>();
+    //各个listview的适配器
     private List<ProjectionListAdapter> mArticleadapters=new ArrayList<>();
+    //各个标签下的listview中的内容
     private List<List<ProjectionArticleBean>> lists=new ArrayList<>();
     private KnowArticlePager mAdapter;
     private List<String> mTitles=new ArrayList<>();
+    //记录每个标签下的页数
     private List<Integer> integers=new ArrayList<>();
+    //记录每个标签网址的ID
     private List<String> Id=new ArrayList<>();
 
     AbsListView.OnScrollListener scrollListener=new AbsListView.OnScrollListener() {

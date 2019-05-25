@@ -3,7 +3,7 @@ package com.example.android.bean;
 import android.graphics.drawable.Drawable;
 
 import com.example.android.presenter.homeFlagmentPresenter;
-import com.example.android.service.BannerPhotoLoad;
+import com.example.android.net.BannerPhotoLoad;
 
 public class BannerBean {
 

@@ -25,7 +25,7 @@ public class BannerAdapter extends PagerAdapter {
     @Override
     public int getCount() {
         if (viewList != null&&(viewList.size()>1)){
-            //设置轮播最大值，等于无限循环
+            //设置轮播最大值，无限循环
             return Integer.MAX_VALUE;
         }
         return 0;
@@ -36,7 +36,7 @@ public class BannerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        //第二处修改，当前要显示的数据索引为集合长度
+        //当前要显示的数据索引为集合长度
         if(viewList.size()!=0) {
             position = position % viewList.size();
         }

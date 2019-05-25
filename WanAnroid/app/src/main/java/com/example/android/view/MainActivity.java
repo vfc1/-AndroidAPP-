@@ -1,7 +1,11 @@
 package com.example.android.view;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,8 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.R;
+import com.example.android.net.LoginVerification;
+import com.example.android.net.Logout;
 
-public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener{
+public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,View.OnClickListener {
 
     private HomeFragment mHomeFragment;
     private KnowledgeFragment mKnowledgeFragment;
@@ -34,10 +40,10 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     private RadioButton mProjection;
     private ImageButton mib_Search;
     private ImageButton mib_Menu;
-    private TextView textView;
-
+    private TextView mTextView,mCollection,mUserName,mLogin;
     private DrawerLayout mDrawerLayout;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,41 +56,50 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         mProjection = (RadioButton) findViewById(R.id.projection);
         mib_Search=(ImageButton)findViewById(R.id.title_search);
         mib_Menu=(ImageButton)findViewById(R.id.title_menu);
-
+        mLogin=(TextView)findViewById(R.id.login_button);
+        mCollection=(TextView)findViewById(R.id.collect_button);
+        mUserName=(TextView)findViewById(R.id.user);
+        mLogin.setOnClickListener(this);
+        mCollection.setOnClickListener(this);
+        mLogin.setOnClickListener(this);
         mGroup.setOnCheckedChangeListener(this);
         mFragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=mFragmentManager.beginTransaction();
         mHomeFragment=new HomeFragment();
         fragmentTransaction.add(R.id.top_fragment,mHomeFragment);
         fragmentTransaction.commit();
-
+        autoLogin();
+        //搜索按钮的监视器
         mib_Search.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //打开搜索的界面
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
             }
         });
 
+        //菜单的监视器，打开菜单
         mib_Menu.setOnClickListener(new Button.OnClickListener(){
                    @Override
                    public void onClick(View v){
                        mDrawerLayout.openDrawer(GravityCompat.START);
            }
        });
-
+    //隐藏标题栏
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
         }
     }
 
+    //底部导航栏的监视器
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int checkedId){
 
         FragmentTransaction fragmentTransaction=mFragmentManager.beginTransaction();
         hideFragment(fragmentTransaction);
-        textView=findViewById(R.id.title_text);
+        mTextView=findViewById(R.id.title_text);
         switch (checkedId){
             case R.id.home:
                 if(mHomeFragment==null){
@@ -93,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 } else{
                     fragmentTransaction.show(mHomeFragment);
                 }
-                textView.setText("首页");
+                mTextView.setText("首页");
                 break;
             case R.id.knowledge:
                 if(mKnowledgeFragment==null){
@@ -102,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 }else{
                     fragmentTransaction.show(mKnowledgeFragment);
                 }
-                textView.setText("体系");
+                mTextView.setText("体系");
                 break;
             case R.id.projection:
                 if(mProjectionFragment==null){
@@ -111,12 +126,12 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 }else{
                     fragmentTransaction.show(mProjectionFragment);
                 }
-                textView.setText("项目");
+                mTextView.setText("项目");
                 break;
         }
         fragmentTransaction.commit();
     }
-
+    //把所有的碎片隐藏起来
     private void hideFragment(FragmentTransaction fragmentTransaction){
         if(mHomeFragment!=null){
             fragmentTransaction.hide(mHomeFragment);
@@ -128,4 +143,57 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             fragmentTransaction.hide(mProjectionFragment);
         }
     }
+
+    //菜单界面按钮的监视器
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.login_button:
+                if(mUserName.getText().toString().equals("请先登录")){
+                    Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+                    startActivityForResult(intent,1);
+                }
+                else{
+                    new Logout(this).layout();
+                    mUserName.setText("请先登录");
+                    mLogin.setText("登录");
+                }
+                break;
+            case R.id.collect_button:
+                if(mUserName.getText().toString().equals("请先登录")){
+                    Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+                    startActivityForResult(intent,1);
+                }else{
+                    Intent intent1=new Intent(MainActivity.this,CollectionActivity.class);
+                    startActivity(intent1);
+                }
+                break;
+             default:
+                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(!(data.getStringExtra("userName").equals(""))){
+            loginSuccess(data.getStringExtra("userName"));
+        }
+    }
+
+    public void loginSuccess(String s){
+        mUserName.setText(s);
+        mLogin.setText("退出登录");
+    }
+
+    //自动登录
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void autoLogin(){
+        SharedPreferences pref=getSharedPreferences("password",MODE_PRIVATE);
+        String username=pref.getString("username",null);
+        String password=pref.getString("password",null);
+        if(!(username==null||password==null)){
+            new LoginVerification(this).login(username,password);
+        }
+    }
+
 }

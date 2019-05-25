@@ -16,6 +16,7 @@ import com.example.android.adapter.AticleViewAdapter;
 import com.example.android.bean.ArticleBean;
 import com.example.android.presenter.SearchDetailPresenter;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +80,7 @@ public class SearchDetailFragment extends Fragment {
     }
 
     protected void resultLoad(String s){
+        s= URLEncoder.encode(s);
         if(mBool){
             before=s;
         }

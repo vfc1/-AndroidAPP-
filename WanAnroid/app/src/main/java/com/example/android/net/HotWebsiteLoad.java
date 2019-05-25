@@ -1,13 +1,12 @@
-package com.example.android.service;
+package com.example.android.net;
 
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
 
-import com.example.android.bean.BannerBean;
+import com.example.android.bean.HotWebsiteBean;
 import com.example.android.presenter.SeaechTipsFraPresenter;
-import com.example.android.presenter.homeFlagmentPresenter;
 import com.example.android.util.ConnectUtil;
 
 import org.json.JSONArray;
@@ -18,16 +17,16 @@ import java.net.HttpURLConnection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class HotWordLoad {
+public class HotWebsiteLoad {
 
     private SeaechTipsFraPresenter mPresenter;
-    private List<String> list=new LinkedList<>();
+    private List<HotWebsiteBean> mHotWebsiteBeans=new LinkedList<>();
     private Handler handler = new Handler() {
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    mPresenter.refreashHotWord(list);
+                    mPresenter.refreashHotWebsite(mHotWebsiteBeans);
                     break;
                 case 2:
                     mPresenter.connectionfailed("数据解析失败");
@@ -40,35 +39,39 @@ public class HotWordLoad {
         }
     };
 
-    public HotWordLoad(SeaechTipsFraPresenter presenter){
+    public HotWebsiteLoad(SeaechTipsFraPresenter presenter){
         this.mPresenter=presenter;
         load();
     }
 
     private void load() {
-            new Thread(new Runnable() {
-                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                @Override
-                public void run() {
-                    HttpURLConnection connection = ConnectUtil.connect("https://www.wanandroid.com//hotkey/json","GET");
-                    String jsonData = ConnectUtil.read(connection);
-                    if(jsonData!=null){parseJSON(jsonData);}
-                    else{
-                        Message message=new Message();
-                        message.what=3;
-                        handler.sendMessage(message);
-                    }
+        new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void run() {
+                HttpURLConnection connection = ConnectUtil.connect("https://www.wanandroid.com/friend/json","GET");
+                String jsonData = ConnectUtil.read(connection);
+                if(jsonData!=null){parseJSON(jsonData);}
+                else{
+                    Message message=new Message();
+                    message.what=3;
+                    handler.sendMessage(message);
                 }
-            }).start();
+            }
+        }).start();
 
-        }
+    }
 
     private void parseJSON(String jsonData){
         try {
             JSONObject jsonObject=new JSONObject(jsonData);
             JSONArray jsonArray=new JSONArray(jsonObject.getString("data"));
             for(int i=0;i<jsonArray.length();i++){
-                list.add(jsonArray.getJSONObject(i).getString("name"));
+                HotWebsiteBean hotWebsiteBean=new HotWebsiteBean();
+                jsonObject=jsonArray.getJSONObject(i);
+                hotWebsiteBean.setmName(jsonObject.getString("name"));
+                hotWebsiteBean.setmWebsite(jsonObject.getString("link"));
+                mHotWebsiteBeans.add(hotWebsiteBean);
             }
             Message message=new Message();
             message.what=1;
@@ -82,3 +85,4 @@ public class HotWordLoad {
 
     }
 }
+

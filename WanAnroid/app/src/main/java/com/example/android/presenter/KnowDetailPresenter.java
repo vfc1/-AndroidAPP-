@@ -1,10 +1,9 @@
 package com.example.android.presenter;
 
-import android.content.Context;
 import android.widget.Toast;
 
 import com.example.android.bean.ArticleBean;
-import com.example.android.service.ArticleLoad;
+import com.example.android.net.ArticleLoad;
 import com.example.android.util.ConnectUtil;
 import com.example.android.view.KnowLedgeDetailActivity;
 

@@ -1,4 +1,4 @@
-package com.example.android.service;
+package com.example.android.net;
 
 import android.os.Build;
 import android.os.Handler;
@@ -6,17 +6,9 @@ import android.os.Message;
 import android.support.annotation.RequiresApi;
 
 import com.example.android.bean.ArticleBean;
-import com.example.android.presenter.KnowDetailPresenter;
 import com.example.android.presenter.SearchDetailPresenter;
-import com.example.android.presenter.homeFlagmentPresenter;
 import com.example.android.util.ConnectUtil;
-import com.example.android.view.SearchDetailFragment;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 

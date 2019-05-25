@@ -1,18 +1,14 @@
 package com.example.android.presenter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.example.android.bean.ArticleBean;
 import com.example.android.bean.BannerBean;
-import com.example.android.service.ArticleLoad;
-import com.example.android.service.BannerLoad;
+import com.example.android.net.ArticleLoad;
+import com.example.android.net.BannerLoad;
 import com.example.android.util.ConnectUtil;
 import com.example.android.view.HomeFragment;
 
@@ -29,6 +25,7 @@ public class homeFlagmentPresenter implements Serializable {
         this.mHomeFragment=homeFragment;
     }
 
+    //下载文章
     public void articleLoad(String website,int i){
         //判断是否有网络连接
 
@@ -39,15 +36,17 @@ public class homeFlagmentPresenter implements Serializable {
         }
 
     }
-
+//发生错误
     public void connectionfailed(String error){
         Toast.makeText(mActivity,error,Toast.LENGTH_LONG).show();
     }
 
+    //刷新文章
     public void articleResult(List<ArticleBean> homeArticleList){
         mHomeFragment.artitleRefresh(homeArticleList);
     }
 
+    //下载轮播图
     public void bannerLoad(String website){
         if (ConnectUtil.checkConnect(mActivity)) {
             new BannerLoad(this).load(website);
@@ -56,6 +55,7 @@ public class homeFlagmentPresenter implements Serializable {
         }
     }
 
+    //刷新轮播图
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void bannerRefresh(BannerBean bannerBean){
         mHomeFragment.bannerRefresh(bannerBean);

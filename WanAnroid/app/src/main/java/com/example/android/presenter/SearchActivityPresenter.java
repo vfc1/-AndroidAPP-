@@ -16,10 +16,12 @@ public class SearchActivityPresenter {
         this.mActivity=activity;
     }
 
+    //加载历史记录
     public void loadHistory(){
         new HistoryLoad(this,mActivity);
     }
 
+    //刷新历史记录
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void refreashHistory(List<String> strings){
         mActivity.refreashHistory(strings);

@@ -1,6 +1,5 @@
-package com.example.android.service;
+package com.example.android.net;
 
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;

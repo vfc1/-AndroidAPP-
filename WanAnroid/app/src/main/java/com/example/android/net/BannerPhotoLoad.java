@@ -1,11 +1,10 @@
-package com.example.android.service;
+package com.example.android.net;
 
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import com.example.android.bean.BannerBean;
 import com.example.android.presenter.homeFlagmentPresenter;

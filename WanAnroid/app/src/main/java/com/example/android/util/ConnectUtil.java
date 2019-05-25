@@ -3,18 +3,14 @@ package com.example.android.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.Message;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import com.example.android.bean.ArticleBean;
-import com.example.android.service.ArticleLoad;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,10 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConnectUtil {
+    //进行网络连接
     public static HttpURLConnection connect(String website,String method){
         HttpURLConnection connection=null;
 
         try {
+            //转为utf—8格式
+            //String result = URLEncoder.encode(website, "utf-8");
             URL url=new URL(website);
             connection=(HttpURLConnection)url.openConnection();
             connection.setRequestMethod(method);
@@ -50,6 +49,7 @@ public class ConnectUtil {
         }
     }
 
+    //转换为图片
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     static public Drawable loadPhoto(String website) {
 
@@ -105,7 +105,7 @@ public class ConnectUtil {
     }
 
 
-
+//转化为json数据的字符串
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String read(HttpURLConnection connection) {
 
@@ -115,7 +115,7 @@ public class ConnectUtil {
         try  {
             if(connection!=null){
                 InputStream in=connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
+                reader = new BufferedReader(new InputStreamReader(in));
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
@@ -139,6 +139,7 @@ public class ConnectUtil {
         return response.toString();
     }
 
+    //检查是否有网络连接
     public static boolean checkConnect(Context context){
 
         ConnectivityManager connectivityManager= (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -146,6 +147,7 @@ public class ConnectUtil {
         return mNetworkInfo != null;
     }
 
+    //解析普通文章的json数据
     public static List<ArticleBean> parseJSON(String jsonData) {
         List<ArticleBean> list = new ArrayList<>();
         try {

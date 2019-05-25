@@ -1,4 +1,4 @@
-package com.example.android.service;
+package com.example.android.net;
 
 import android.os.Build;
 import android.os.Handler;
@@ -6,7 +6,6 @@ import android.os.Message;
 import android.support.annotation.RequiresApi;
 
 import com.example.android.bean.ProjectonBean;
-import com.example.android.presenter.KnowledgeFragPresenter;
 import com.example.android.presenter.ProjectionPresenter;
 import com.example.android.util.ConnectUtil;
 
