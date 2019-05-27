@@ -118,9 +118,7 @@ public class ProjectionFragment extends Fragment {
     public void refreashArticle(List<ProjectionArticleBean> articleBeans,int i){
         List<ProjectionArticleBean> articleBeanList=lists.get(i);
         ProjectionListAdapter adapter=mArticleadapters.get(i);
-        for(int j=0;j<articleBeans.size();j++){
-            articleBeanList.add(articleBeans.get(j));
-        }
+        articleBeanList.addAll(articleBeans);
         //viewpager和listview的数据都刷新
         adapter.notifyDataSetChanged();
         mAdapter.notifyDataSetChanged();

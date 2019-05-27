@@ -34,9 +34,10 @@ public class ArticleLoad {
                     if (mKnowPresenter != null) {
                         mKnowPresenter.articleResult(mArticleList, tab);
                     }
-                    if (mHomePresenter != null) {
+                    else if (mHomePresenter != null) {
                         mHomePresenter.articleResult(mArticleList);
-                    } else {
+                    }
+                    else if(mCollectionPresenter!=null){
                         mCollectionPresenter.refreash(mArticleList);
                     }
                     break;
@@ -135,8 +136,6 @@ public class ArticleLoad {
     }
 
     private void listAdd(List<ArticleBean> list){
-        for(int i=0;i<list.size();i++){
-           mArticleList.add(list.get(i));
-        }
+        mArticleList.addAll(list);
     }
 }

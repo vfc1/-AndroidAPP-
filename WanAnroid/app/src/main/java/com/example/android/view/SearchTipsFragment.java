@@ -29,7 +29,6 @@ import java.util.Set;
 
 public class SearchTipsFragment extends Fragment {
 
-    private SeaechTipsFraPresenter mPresenter;
     private SearchActivity mActivity;
     private MyViewGroup mHistory;
     private MyViewGroup mHotWord;
@@ -42,6 +41,7 @@ public class SearchTipsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,ViewGroup container,
                              Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.search_tips_fragment, container, false);
+        SeaechTipsFraPresenter mPresenter;
         mPresenter=new SeaechTipsFraPresenter(this);
         mHistory=(MyViewGroup)view.findViewById(R.id.historical_records);
         mHistory.setSpacing(20,20,20,20);

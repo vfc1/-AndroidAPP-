@@ -20,7 +20,6 @@ public class CollectionActivity extends AppCompatActivity {
     private String web1="https://www.wanandroid.com/lg/collect/list/";
     private String web2="/json";
     private List<ArticleBean> articleBeans=new ArrayList<>();
-    private ListView listView;
     private AticleViewAdapter adapter;
     private CollectionPresenter mPresenter;
 
@@ -51,6 +50,7 @@ public class CollectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ListView listView;
         setContentView(R.layout.activity_collection);
         mPresenter=new CollectionPresenter(this);
         mPresenter.load(web1+i+web2);
@@ -61,9 +61,7 @@ public class CollectionActivity extends AppCompatActivity {
     }
 
     public void refreash(List<ArticleBean> list){
-        for(int i=0;i<list.size();i++){
-            articleBeans.add(list.get(i));
-        }
+        articleBeans.addAll(list);
         adapter.notifyDataSetChanged();
     }
 }

@@ -21,15 +21,15 @@ import java.util.List;
 
 public class KnowledgeFragment extends Fragment {
 
-    private View view;
     private KnowledgeFragPresenter mPresenter;
-    private Activity mActivity;
     private List<KnowledgeBean> mKnowledgeBeanList=new ArrayList<>();//存放体系每一个框的信息
-    private ListView mListView;
     private KnowLegedListAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        View view;
+        Activity mActivity;
+        ListView mListView;
         view=inflater.inflate(R.layout.knowledge_fragment,container,false);
         mActivity=(Activity) getContext();
         mPresenter=new KnowledgeFragPresenter(mActivity,this);
@@ -57,9 +57,7 @@ public class KnowledgeFragment extends Fragment {
     }
 
     public void refresh(List<KnowledgeBean> knowledgeBeanList){
-        for(int i=0;i<knowledgeBeanList.size();i++){
-            mKnowledgeBeanList.add(knowledgeBeanList.get(i));
-        }
+        mKnowledgeBeanList.addAll(knowledgeBeanList);
         mAdapter.notifyDataSetChanged();
     }
 }

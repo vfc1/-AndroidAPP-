@@ -41,7 +41,6 @@ public class  HomeFragment extends Fragment {
     private final String web2="/json";
     //判断页数
     private int i=0;
-    private ViewPager viewPager;
     private  ViewpagerTime viewpagerTime;
     private RelativeLayout relativeLayout;
     //判断是否为下拉
@@ -86,6 +85,7 @@ public class  HomeFragment extends Fragment {
                              Bundle saveInstanceState){
         View view=inflater.inflate(R.layout.home_fragment,container,false);
         mActivity=(Activity)getContext();
+        ViewPager viewPager;
         mpresenter=new homeFlagmentPresenter(mActivity,this);
         //下载首页banner图
         mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");

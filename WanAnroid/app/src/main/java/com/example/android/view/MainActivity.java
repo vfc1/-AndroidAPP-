@@ -34,13 +34,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     private ProjectionFragment mProjectionFragment;
     private FragmentManager mFragmentManager;
 
-    private RadioGroup mGroup;
-    private RadioButton mHome;
-    private RadioButton mKnowladge;
-    private RadioButton mProjection;
-    private ImageButton mib_Search;
-    private ImageButton mib_Menu;
-    private TextView mTextView,mCollection,mUserName,mLogin;
+    private TextView TextView,mTextView, mUserName,mLogin;
     private DrawerLayout mDrawerLayout;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -49,6 +43,13 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        TextView mCollection;
+        ImageButton mib_Menu;
+        ImageButton mib_Search;
+        RadioButton mProjection;
+        RadioButton mHome;
+        RadioGroup mGroup;
+        RadioButton mKnowladge;
         mDrawerLayout=(DrawerLayout)findViewById(R.id.drawer_layout);
         mGroup = (RadioGroup) findViewById(R.id.ra_group);
         mHome = (RadioButton) findViewById(R.id.home);

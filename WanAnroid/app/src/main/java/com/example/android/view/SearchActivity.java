@@ -28,8 +28,6 @@ import java.util.Set;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageButton ib_back;
-    private ImageButton ib_search;
     private SearchTipsFragment searchTipsFragment;
     private SearchDetailFragment searchDetailFragment;
     private FragmentManager manager;
@@ -41,6 +39,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ImageButton ib_back;
+        ImageButton ib_search;
         new SearchActivityPresenter(this).loadHistory();
         setContentView(R.layout.activity_search);
         ActionBar actionBar = getSupportActionBar();

@@ -113,9 +113,7 @@ public class KnowLedgeDetailActivity extends AppCompatActivity {
 
     public void refreash(List<ArticleBean> articleBeanList,int i){
         List<ArticleBean> articleBeans =lists.get(i);
-        for(int j=0;j<articleBeanList.size();j++){
-            articleBeans.add(articleBeanList.get(j));
-        }
+        articleBeans.addAll(articleBeanList);
         mLIistadapter.get(i).notifyDataSetChanged();
         mAdapter.notifyDataSetChanged();
     }

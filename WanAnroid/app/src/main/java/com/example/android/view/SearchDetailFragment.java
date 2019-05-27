@@ -95,9 +95,7 @@ public class SearchDetailFragment extends Fragment {
             this.i=0;
             adapter.notifyDataSetChanged();
         }
-        for(int i=0;i<list.size();i++){
-            mArticleBeans.add(list.get(i));
-        }
+        mArticleBeans.addAll(list);
         adapter.notifyDataSetChanged();
     }
 

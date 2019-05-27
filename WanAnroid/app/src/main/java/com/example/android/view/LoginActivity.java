@@ -22,12 +22,12 @@ import com.example.android.net.Register;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText mUserNamw,mPassword;
-    private Button mLogin,mRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Button mLogin,mRegister;
         mUserNamw=(EditText)findViewById(R.id.user_name);
         mPassword=(EditText)findViewById(R.id.editTextPassWord);
         mLogin=(Button)findViewById(R.id.login);

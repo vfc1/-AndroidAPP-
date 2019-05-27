@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +24,11 @@ public class ProjectionArticleLoad {
     private List<ProjectionArticleBean> mProjectionArticleBeans=new ArrayList<>();
     //记录是第几个listview;
     int i;
-
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    mPresenter.articleResult(mProjectionArticleBeans,i);
+                    mPresenter.articleResult(mProjectionArticleBeans, i);
                     break;
                 case 2:
                     mPresenter.connectionfailed("数据解析失败");
@@ -40,6 +40,9 @@ public class ProjectionArticleLoad {
             }
         }
     };
+
+
+
 
     public ProjectionArticleLoad(ProjectionPresenter projectionPresenter,String website,int i){
         this.i=i;
