@@ -14,7 +14,6 @@ import com.example.android.R;
 import com.example.android.adapter.KnowLegedListAdapter;
 import com.example.android.bean.KnowledgeBean;
 import com.example.android.presenter.KnowledgeFragPresenter;
-import com.example.android.presenter.homeFlagmentPresenter;
 
 import java.util.ArrayList;
 import java.util.List;

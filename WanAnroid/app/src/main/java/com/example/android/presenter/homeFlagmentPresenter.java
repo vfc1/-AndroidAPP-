@@ -15,12 +15,12 @@ import com.example.android.view.HomeFragment;
 import java.io.Serializable;
 import java.util.List;
 
-public class homeFlagmentPresenter implements Serializable {
+public class HomeFlagmentPresenter implements Serializable {
 
     private Context mActivity;
     private HomeFragment mHomeFragment;
 
-    public homeFlagmentPresenter(Context activity, HomeFragment homeFragment){
+    public HomeFlagmentPresenter(Context activity, HomeFragment homeFragment){
         this.mActivity=activity;
         this.mHomeFragment=homeFragment;
     }

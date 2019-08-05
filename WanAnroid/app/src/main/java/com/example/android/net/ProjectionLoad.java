@@ -4,15 +4,18 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import com.example.android.bean.ProjectonBean;
 import com.example.android.presenter.ProjectionPresenter;
 import com.example.android.util.ConnectUtil;
+import com.example.android.view.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,24 +23,38 @@ public class ProjectionLoad {
 
     private ProjectionPresenter mPresenter;
     private List<ProjectonBean> mProjectonBeans=new ArrayList<>();
-    private Handler handler = new Handler() {
+    private static class MyHandler extends Handler{
+        WeakReference<ProjectionPresenter> presenterWeakReference;
+        List<ProjectonBean> mProjectonBeans;
+
+        public MyHandler(ProjectionPresenter presenter,List<ProjectonBean> list){
+            presenterWeakReference=new WeakReference<>(presenter);
+            mProjectonBeans=list;
+        }
+
+        @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    mPresenter.result(mProjectonBeans);
-                    break;
-                case 2:
-                    mPresenter.connectionfailed("数据解析失败");
-                    break;
-                case 3:
-                    mPresenter.connectionfailed("网络连接失败");
-                default:
-                    break;
+            ProjectionPresenter mPresenter=presenterWeakReference.get();
+            if(mPresenter!=null&&mProjectonBeans!=null){
+                switch (msg.what) {
+                    case 1:
+                        mPresenter.result(mProjectonBeans);
+                        break;
+                    case 2:
+                        mPresenter.connectionfailed("数据解析失败");
+                        break;
+                    case 3:
+                        mPresenter.connectionfailed("网络连接失败");
+                    default:
+                        break;
+                }
             }
         }
-    };
+    }
+    private MyHandler handler;
 
     public ProjectionLoad(ProjectionPresenter presenter){
+        handler=new MyHandler(presenter,mProjectonBeans);
         this.mPresenter=presenter;
         load();
     }

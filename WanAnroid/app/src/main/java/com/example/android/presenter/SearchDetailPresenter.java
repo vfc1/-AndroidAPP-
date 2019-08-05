@@ -17,12 +17,10 @@ public class SearchDetailPresenter {
 
     private SearchDetailFragment mFragment;
     private SearchResultLoad searchResultLoad;
-    private Context context=null;
 
     public SearchDetailPresenter(SearchDetailFragment fragment){
         searchResultLoad=new SearchResultLoad(this);
         this.mFragment=fragment;
-        context=mFragment.getContext();
     }
 
     //加载搜索结果

@@ -4,10 +4,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import com.example.android.bean.ProjectionArticleBean;
 import com.example.android.presenter.ProjectionPresenter;
 import com.example.android.util.ConnectUtil;
+import com.example.android.view.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,33 +22,43 @@ import java.util.List;
 
 public class ProjectionArticleLoad {
 
-    private ProjectionPresenter mPresenter;
     private List<ProjectionArticleBean> mProjectionArticleBeans=new ArrayList<>();
     //记录是第几个listview;
-    int i;
-    private Handler handler = new Handler() {
+    private int i;
+    private static class MyHandler extends Handler{
+        WeakReference<ProjectionPresenter> presenterWeakReference;
+        private List<ProjectionArticleBean> mProjectionArticleBeans;
+
+        public MyHandler(ProjectionPresenter presenter,List<ProjectionArticleBean> list){
+            presenterWeakReference=new WeakReference<>(presenter);
+            mProjectionArticleBeans=list;
+        }
+
+        @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    mPresenter.articleResult(mProjectionArticleBeans, i);
-                    break;
-                case 2:
-                    mPresenter.connectionfailed("数据解析失败");
-                    break;
-                case 3:
-                    mPresenter.connectionfailed("网络连接失败");
-                default:
-                    break;
+            ProjectionPresenter mPresenter=presenterWeakReference.get();
+            if(mPresenter!=null&&mProjectionArticleBeans!=null){
+                switch (msg.what) {
+                    case 1:
+                        mPresenter.articleResult(mProjectionArticleBeans, msg.arg1);
+                        break;
+                    case 2:
+                        mPresenter.connectionfailed("数据解析失败");
+                        break;
+                    case 3:
+                        mPresenter.connectionfailed("网络连接失败");
+                    default:
+                        break;
+                }
             }
         }
-    };
-
-
+    }
+    private MyHandler handler;
 
 
     public ProjectionArticleLoad(ProjectionPresenter projectionPresenter,String website,int i){
         this.i=i;
-        this.mPresenter=projectionPresenter;
+        handler=new MyHandler(projectionPresenter,mProjectionArticleBeans);
         load(website);
     }
 
@@ -93,6 +105,7 @@ public class ProjectionArticleLoad {
             }
             Message message=new Message();
             message.what=1;
+            message.arg1=i;
             handler.sendMessage(message);
         } catch (JSONException e) {
             e.printStackTrace();

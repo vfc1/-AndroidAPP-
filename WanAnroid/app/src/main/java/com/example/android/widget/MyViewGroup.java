@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 public class MyViewGroup extends ViewGroup {
 
@@ -45,16 +46,16 @@ public class MyViewGroup extends ViewGroup {
             View child = getChildAt(index);
             child.setPadding(left, top, right, bottom);
             child.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
-            int width = child.getMeasuredWidth();
-            int height = child.getMeasuredHeight();
-            x += width;
+            int width = MeasureSpec.getSize(child.getMeasuredWidth());
+            int height = MeasureSpec.getSize(child.getMeasuredHeight());
+            x += width+margin_right+margin_left;
             if (x > actualWidth) {//换行
-                x = width;
+                x = width+margin_left+margin_right;
                 rows++;
             }
             y = rows * (height+margin_top+margin_bottom);
         }
-        setMeasuredDimension(actualWidth, y+100+increase);
+        setMeasuredDimension(actualWidth, y+50+increase);//+100
     }
 
 
@@ -86,6 +87,7 @@ public class MyViewGroup extends ViewGroup {
 
     }
 
+    //控件与控件的距离
     public void setSpacing(int margin_left,int margin_top,int margin_right,int margin_bottom){
         this.margin_left=margin_left;
         this.margin_top=margin_top;
@@ -94,6 +96,7 @@ public class MyViewGroup extends ViewGroup {
 
     }
 
+    //控件与控件内容的距离
     public void setViewPadding(int left ,int top,int right,int bottom ){
         this.left=left;
         this.top=top;

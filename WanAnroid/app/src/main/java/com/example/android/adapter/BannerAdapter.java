@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -40,7 +41,6 @@ public class BannerAdapter extends PagerAdapter {
         if(viewList.size()!=0) {
             position = position % viewList.size();
         }
-        //
         container.removeView(viewList.get(position));
         container.addView(viewList.get(position));
         return viewList.get(position);

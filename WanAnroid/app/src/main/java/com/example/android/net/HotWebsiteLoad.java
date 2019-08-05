@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.annotation.RequiresApi;
 
 import com.example.android.bean.HotWebsiteBean;
+import com.example.android.presenter.ProjectionPresenter;
 import com.example.android.presenter.SeaechTipsFraPresenter;
 import com.example.android.util.ConnectUtil;
 
@@ -13,34 +14,47 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.util.LinkedList;
 import java.util.List;
 
 public class HotWebsiteLoad {
 
-    private SeaechTipsFraPresenter mPresenter;
     private List<HotWebsiteBean> mHotWebsiteBeans=new LinkedList<>();
-    private Handler handler = new Handler() {
+    private static class MyHandler extends Handler{
+        WeakReference<SeaechTipsFraPresenter> presenterWeakReference;
+        List<HotWebsiteBean> mHotWebsiteBeans;
+
+        public MyHandler(SeaechTipsFraPresenter presenter,List<HotWebsiteBean> beanList){
+            presenterWeakReference=new WeakReference<>(presenter);
+            mHotWebsiteBeans=beanList;
+        }
+
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+        @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    mPresenter.refreashHotWebsite(mHotWebsiteBeans);
-                    break;
-                case 2:
-                    mPresenter.connectionfailed("数据解析失败");
-                    break;
-                case 3:
-                    mPresenter.connectionfailed("网络连接失败");
-                default:
-                    break;
+            SeaechTipsFraPresenter mPresenter=presenterWeakReference.get();
+            if(mPresenter!=null){
+                switch (msg.what) {
+                    case 1:
+                        mPresenter.refreashHotWebsite(mHotWebsiteBeans);
+                        break;
+                    case 2:
+                        mPresenter.connectionfailed("数据解析失败");
+                        break;
+                    case 3:
+                        mPresenter.connectionfailed("网络连接失败");
+                    default:
+                        break;
+                }
             }
         }
-    };
+    }
+    private MyHandler handler;
 
     public HotWebsiteLoad(SeaechTipsFraPresenter presenter){
-        this.mPresenter=presenter;
+        handler=new MyHandler(presenter,mHotWebsiteBeans);
         load();
     }
 

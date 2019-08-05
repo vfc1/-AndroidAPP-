@@ -9,6 +9,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.android.presenter.ProjectionPresenter;
 import com.example.android.util.ConnectUtil;
 import com.example.android.view.LoginActivity;
 import com.example.android.view.MainActivity;
@@ -16,6 +17,7 @@ import com.example.android.view.MainActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -32,16 +34,27 @@ public class LoginVerification {
     private String web1="https://www.wanandroid.com/user/login?username=";
     private String web2="&password=";
     private List<String> setCookies;
-    private Handler handler = new Handler() {
+    private static class MyHandler extends Handler{
+        WeakReference<LoginActivity> loginActivityWeakReference;
+        WeakReference<MainActivity> mainActivityWeakReference;
+
+        public MyHandler(LoginActivity loginActivity,MainActivity mainActivity){
+            loginActivityWeakReference=new WeakReference<>(loginActivity);
+            mainActivityWeakReference=new WeakReference<>(mainActivity);
+        }
+
+        @Override
         public void handleMessage(Message msg) {
+            LoginActivity mLoginActivity=loginActivityWeakReference.get();
+            MainActivity mMainActivity=mainActivityWeakReference.get();
             switch (msg.what) {
                 case 1:
                     if(mLoginActivity==null){
-                        mMainActivity.loginSuccess(mUserName);
+                        mMainActivity.loginSuccess((String) msg.obj);
                     }
                     else{
                         mLoginActivity.toastShow("登录成功");
-                        mLoginActivity.setText(mUserName);
+                        mLoginActivity.setText((String)msg.obj);
                     }
                     break;
                 case 2:
@@ -56,16 +69,22 @@ public class LoginVerification {
                 default:
                     break;
             }
+
         }
-    };
+    }
+    private MyHandler handler;
+
 
 
     public LoginVerification(LoginActivity loginActivity){
+
         mLoginActivity=loginActivity;
+        handler=new MyHandler(loginActivity,null);
     }
 
     public LoginVerification(MainActivity mainActivity){
         mMainActivity=mainActivity;
+        handler=new MyHandler(null,mainActivity);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -95,6 +114,7 @@ public class LoginVerification {
                                 handler.sendMessage(message);
                             } else {
                                 message.what=1;
+                                message.obj=userNmae;
                                 handler.sendMessage(message);
                                 layIn();
                             }

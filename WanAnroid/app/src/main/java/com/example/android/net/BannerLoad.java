@@ -7,36 +7,49 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.example.android.bean.BannerBean;
-import com.example.android.presenter.homeFlagmentPresenter;
+import com.example.android.presenter.HomeFlagmentPresenter;
+import com.example.android.presenter.ProjectionPresenter;
 import com.example.android.util.ConnectUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BannerLoad {
 
-    private homeFlagmentPresenter mPresenter;
     private List<BannerBean> bannerBeanList=new ArrayList<>();
-    private Handler handler = new Handler() {
-        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    private static class MyHandler extends Handler{
+        WeakReference<HomeFlagmentPresenter> presenterWeakReference;
+        List<BannerBean> bannerBeanList;
+
+        public MyHandler(HomeFlagmentPresenter presenter,List<BannerBean> list){
+            presenterWeakReference=new WeakReference<>(presenter);
+            bannerBeanList=list;
+        }
+
+        @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    bannerBeanList.get(msg.arg1).setDrawable((String)msg.obj,mPresenter);
-                    break;
-                default:
-                    break;
+            HomeFlagmentPresenter mPresenter=presenterWeakReference.get();
+            if(mPresenter!=null){
+                switch (msg.what) {
+                    case 1:
+                        bannerBeanList.get(msg.arg1).setDrawable((String)msg.obj,mPresenter);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
-    };
+    }
+    private MyHandler handler;
 
-    public BannerLoad(homeFlagmentPresenter presenter){
-        this.mPresenter=presenter;
+    public BannerLoad(HomeFlagmentPresenter presenter){
+        handler=new MyHandler(presenter,bannerBeanList);
     }
 
     public void load(final String website){

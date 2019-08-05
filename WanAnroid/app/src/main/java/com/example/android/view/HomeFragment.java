@@ -8,7 +8,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import com.example.android.adapter.AticleViewAdapter;
 import com.example.android.adapter.BannerAdapter;
 import com.example.android.bean.ArticleBean;
 import com.example.android.bean.BannerBean;
-import com.example.android.presenter.homeFlagmentPresenter;
+import com.example.android.presenter.HomeFlagmentPresenter;
 
 import java.util.ArrayList;
 
@@ -34,7 +33,7 @@ import java.util.List;
 public class  HomeFragment extends Fragment {
 
     private AticleViewAdapter madapter;
-    private homeFlagmentPresenter mpresenter;
+    private HomeFlagmentPresenter mpresenter;
     private Activity mActivity;
     private SwipeRefreshLayout swipeRefresh;
     private final String web1="https://www.wanandroid.com/article/list/";
@@ -86,7 +85,7 @@ public class  HomeFragment extends Fragment {
         View view=inflater.inflate(R.layout.home_fragment,container,false);
         mActivity=(Activity)getContext();
         ViewPager viewPager;
-        mpresenter=new homeFlagmentPresenter(mActivity,this);
+        mpresenter=new HomeFlagmentPresenter(mActivity,this);
         //下载首页banner图
         mpresenter.bannerLoad("https://www.wanandroid.com/banner/json");
         swipeRefresh=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh);

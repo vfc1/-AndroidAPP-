@@ -7,38 +7,51 @@ import android.support.annotation.RequiresApi;
 
 import com.example.android.bean.KnowledgeBean;
 import com.example.android.presenter.KnowledgeFragPresenter;
+import com.example.android.presenter.ProjectionPresenter;
 import com.example.android.util.ConnectUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public class KnowledgeLoad {
-    private KnowledgeFragPresenter mPresenter;
     private List<KnowledgeBean> knowledgeBeanList = new ArrayList<>();
-    private Message message = new Message();
-    private Handler handler = new Handler() {
+    private static class MyHandler extends Handler{
+        WeakReference<KnowledgeFragPresenter> presenterWeakReference;
+        List<KnowledgeBean> knowledgeBeanList;
+
+        public MyHandler(KnowledgeFragPresenter presenter,List<KnowledgeBean> list){
+            knowledgeBeanList=list;
+            presenterWeakReference=new WeakReference<>(presenter);
+        }
+
+        @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    mPresenter.result(knowledgeBeanList);
-                    break;
-                case 2:
-                    mPresenter.connectionfailed("数据解析失败");
-                    break;
-                case 3:
-                    mPresenter.connectionfailed("网络连接失败");
-                default:
-                    break;
+            KnowledgeFragPresenter mPresenter=presenterWeakReference.get();
+            if(mPresenter!=null){
+                switch (msg.what) {
+                    case 1:
+                        mPresenter.result(knowledgeBeanList);
+                        break;
+                    case 2:
+                        mPresenter.connectionfailed("数据解析失败");
+                        break;
+                    case 3:
+                        mPresenter.connectionfailed("网络连接失败");
+                    default:
+                        break;
+                }
             }
         }
-    };
+    }
+    private MyHandler handler;
 
     public KnowledgeLoad(KnowledgeFragPresenter presenter, final String website) {
-        this.mPresenter = presenter;
+        handler=new MyHandler(presenter,knowledgeBeanList);
         new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override

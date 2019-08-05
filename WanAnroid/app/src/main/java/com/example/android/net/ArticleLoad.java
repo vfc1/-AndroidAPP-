@@ -8,31 +8,48 @@ import android.support.annotation.RequiresApi;
 import com.example.android.bean.ArticleBean;
 import com.example.android.presenter.CollectionPresenter;
 import com.example.android.presenter.KnowDetailPresenter;
-import com.example.android.presenter.homeFlagmentPresenter;
+import com.example.android.presenter.HomeFlagmentPresenter;
+import com.example.android.presenter.KnowledgeFragPresenter;
+import com.example.android.presenter.ProjectionPresenter;
 import com.example.android.util.ConnectUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleLoad {
 
-    private homeFlagmentPresenter mHomePresenter=null;
-    private KnowDetailPresenter mKnowPresenter=null;
-    private CollectionPresenter mCollectionPresenter=null;
     private List<ArticleBean> mArticleList = new ArrayList<>();
     private Message message = new Message();
     //记录第几个标签
     private int tab;
-    private Handler handler = new Handler() {
+
+    private static class MyHandler extends Handler{
+        WeakReference<HomeFlagmentPresenter> homeFlagmentPresenterWeakReference;
+        WeakReference<KnowDetailPresenter> knowDetailPresenterWeakReference;
+        WeakReference<CollectionPresenter> collectionPresenterWeakReference;
+        List<ArticleBean> mArticleList;
+
+        public MyHandler(HomeFlagmentPresenter homeFlagmentPresenter, KnowDetailPresenter knowDetailPresenter,CollectionPresenter collectionPresenter,List<ArticleBean> list){
+            homeFlagmentPresenterWeakReference=new WeakReference<>(homeFlagmentPresenter);
+            knowDetailPresenterWeakReference=new WeakReference<>(knowDetailPresenter);
+            collectionPresenterWeakReference=new WeakReference<>(collectionPresenter);
+            mArticleList=list;
+        }
+
+        @Override
         public void handleMessage(Message msg) {
+            HomeFlagmentPresenter mHomePresenter=homeFlagmentPresenterWeakReference.get();
+            KnowDetailPresenter mKnowPresenter=knowDetailPresenterWeakReference.get();
+            CollectionPresenter mCollectionPresenter=collectionPresenterWeakReference.get();
             switch (msg.what) {
                 case 1:
                     if (mKnowPresenter != null) {
-                        mKnowPresenter.articleResult(mArticleList, tab);
+                        mKnowPresenter.articleResult(mArticleList, msg.arg1);
                     }
                     else if (mHomePresenter != null) {
                         mHomePresenter.articleResult(mArticleList);
@@ -65,21 +82,23 @@ public class ArticleLoad {
                     break;
             }
         }
-    };
+    }
+
+    private MyHandler handler;
 
     public ArticleLoad(KnowDetailPresenter knowDetailPresenter,String website,int i){
-        this.mKnowPresenter=knowDetailPresenter;
+        handler=new MyHandler(null,knowDetailPresenter,null,mArticleList);
         this.tab=i;
         load(website,i);
 
     }
 
     public ArticleLoad(CollectionPresenter presenter){
-       mCollectionPresenter=presenter;
+       handler=new MyHandler(null,null,presenter,mArticleList);
     }
 
-    public ArticleLoad(homeFlagmentPresenter presenter,  String website,int i) {
-        this.mHomePresenter = presenter;
+    public ArticleLoad(HomeFlagmentPresenter presenter, String website, int i) {
+        handler=new MyHandler(presenter,null,null,mArticleList);
         load(website, i);
     }
 
@@ -89,6 +108,7 @@ public class ArticleLoad {
             @Override
             public void run() {
                 message.what = 1;
+                message.arg1=tab;
                 String topJSONdata = null;
                 String jsonData =ConnectUtil.read( ConnectUtil.connect(website,"GET"));
                 if (i == -1) {

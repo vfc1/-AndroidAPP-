@@ -10,7 +10,9 @@ import android.support.annotation.RequiresApi;
 
 import com.example.android.presenter.SeaechTipsFraPresenter;
 import com.example.android.presenter.SearchActivityPresenter;
+import com.example.android.util.ConnectUtil;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +56,5 @@ public class HistoryLoad {
                 handler.sendMessage(message);
             }
         }).start();
-
     }
 }

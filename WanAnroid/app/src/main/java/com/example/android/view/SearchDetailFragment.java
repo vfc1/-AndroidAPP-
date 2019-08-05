@@ -3,6 +3,7 @@ package com.example.android.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,21 +81,19 @@ public class SearchDetailFragment extends Fragment {
     }
 
     protected void resultLoad(String s){
+        Log.d("test",""+i);
         s= URLEncoder.encode(s);
         if(mBool){
             before=s;
-        }
-        mPresenter.loadResult(web1+i+web2+"?k="+s);
-        i++;
-    }
-
-    public void refreashResult(List<ArticleBean> list){
-        if(mBool==true){
             mArticleBeans.clear();
             mBool=false;
             this.i=0;
-            adapter.notifyDataSetChanged();
         }
+        mPresenter.loadResult(web1+i+web2+"?k="+s);
+        ++i;
+    }
+
+    public void refreashResult(List<ArticleBean> list){
         mArticleBeans.addAll(list);
         adapter.notifyDataSetChanged();
     }
